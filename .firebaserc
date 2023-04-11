@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "elecciones-proyecto": {
+      "hosting": {
+        "sidenav": [
+          "elecciones-proyecto"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "elecciones-proyecto"
+  }
+}

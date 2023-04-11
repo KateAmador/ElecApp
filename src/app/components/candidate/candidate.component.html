@@ -1,0 +1,12 @@
+<div class="container mt-4">
+  <div class="card">
+    <h1 class="card-header">Candidato</h1>
+    <div class="card-body">
+      <div class="card m-5 col-4 mx-auto">
+        <div class="card-body">
+          <h3 class="card-title" *ngFor="let item of items$ | async">{{item.nombre}} {{item.apellido}}</h3>
+          <p class="card-text" *ngFor="let item of items$ | async">Partido: {{item.partido}}</p>
+          <p class="card-text" *ngFor="let item of items$ | async">Cedula: {{item.id}}</p>
+          <p class="card-text" *ngFor="let item of items$ | async">Numero: {{item.numero}}</p>
+        </div>
+      </div>
