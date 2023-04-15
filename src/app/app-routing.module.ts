@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'inicio', component: DashboardComponent },
   { path: 'candidato', component: CandidateComponent },
   { path: 'lideres', component: LeadersComponent },
+  { path: 'editar-lideres/:id', component: LeadersComponent },
   { path: 'seguidores', component: SupportersComponent },
   { path: 'testigos', component: WitnessesComponent },
   { path: 'configuracion', component: SettingsComponent },

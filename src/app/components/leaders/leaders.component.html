@@ -1,6 +1,10 @@
 <div class="container mt-4">
   <div class="card">
-    <h1 class="card-header">Lideres</h1>
+    <h1 class="card-header">{{titulo}}
+      <div *ngIf="loading" class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </h1>
     <div class="card-body">
 
       <div class="container mt-5">
@@ -8,20 +12,21 @@
           <div class="col-md-4">
 
             <!-- Formulario -->
-            <form [formGroup]="createLeader" (ngSubmit)="newLeader()">
+            <form [formGroup]="createLeader" (ngSubmit)="addEdit()">
               <fieldset>
                 <legend>Agregar Lider</legend>
-                <span *ngIf="submitted && createLeader.invalid" class="badge bg-danger">Todos los campos son obligatorios</span>
-                <input class="form-control border-0 border-bottom mt-5" formControlName="id"
-                  formControlName="id" placeholder="Documento">
+                <span *ngIf="submitted && createLeader.invalid" class="badge bg-danger">Todos los campos son
+                  obligatorios</span>
+                <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="documento"
+                  placeholder="Documento">
                 <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
-                  formControlName="nombre" placeholder="Nombre">
+                  placeholder="Nombre">
                 <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
-                  formControlName="apellido" placeholder="Apellido">
+                  placeholder="Apellido">
                 <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
-                  formControlName="direccion" placeholder="Direccion">
+                  placeholder="Direccion">
                 <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
-                  formControlName="telefono" placeholder="Telefono">
+                  placeholder="Telefono">
                 <button type="submit" class="btn btn-dark  mt-2 float-end">Agregar</button>
               </fieldset>
             </form>
@@ -32,7 +37,8 @@
             <div class="table-responsive">
 
               <!-- Tabla -->
-              <table class="table table-striped">
+              <h4 *ngIf="leaders.length == 0">No hay datos para mostrar</h4>
+              <table class="table table-striped" *ngIf="leaders.length > 0">
                 <thead>
                   <tr>
                     <th scope="col">ID</th>
@@ -44,15 +50,16 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">11150844780</th>
-                    <td>Katherin</td>
-                    <td>Amador</td>
-                    <td>Calle 14a # 25-17</td>
-                    <td>3163160666</td>
+                  <tr *ngFor="let leader of leaders">
+                    <th scope="row">{{leader.documento}}</th>
+                    <td>{{leader.nombre}}</td>
+                    <td>{{leader.apellido}}</td>
+                    <td>{{leader.direccion}}</td>
+                    <td>{{leader.telefono}}</td>
                     <td>
-                      <a class="btn btn-sm btn-primary me-2"><i class="bi bi-pencil-square"></i></a>
-                      <a class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                      <a class="btn btn-sm btn-primary me-2" [routerLink]="['/editar-lideres/', leader.id]"><i class="bi bi-pencil-square"></i></a>
+                      <a (click)="deleteLeader(leader)" class="btn btn-sm btn-danger"><i
+                          class="bi bi-trash"></i></a>
                     </td>
                   </tr>
                 </tbody>
@@ -63,3 +70,6 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
