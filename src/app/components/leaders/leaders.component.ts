@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadersService } from '@services/leaders.service';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import Leader from 'src/app/interfaces/leader.interface';
 
@@ -11,12 +12,17 @@ import Leader from 'src/app/interfaces/leader.interface';
   styleUrls: ['./leaders.component.scss']
 })
 export class LeadersComponent {
+  firestore: Firestore = inject(Firestore);
   createLeader: FormGroup;
   submitted = false;
   loading = false;
   leaders: any[] = [];
   id: string | null;
-  titulo = 'Agregar Lider';
+  titulo: string;
+  boton: string;
+  backButtonVisible = false;
+  hasCandidate = false;
+  candidateId: string = 'candidatoID';
 
   constructor(
     private fb: FormBuilder,
@@ -33,12 +39,15 @@ export class LeadersComponent {
       telefono: ['', Validators.required,]
     })
     this.id = this.aRoute.snapshot.paramMap.get('id');
-    console.log(this.id);
+    this.titulo = this.id ? 'Editar Lider' : 'Crear Lider';
+    this.boton = this.id ? 'Editar' : 'Agregar';
   }
 
   ngOnInit(): void {
-    this.getLeaders();
+    this.getLeaders(this.candidateId);
     this.updateLeader();
+    this.findCandidate();
+    this.backButton();
   }
 
   async addEdit() {
@@ -55,7 +64,6 @@ export class LeadersComponent {
     } else {
       this.update(this.id);
     }
-
   }
 
   async newLeader() {
@@ -69,7 +77,7 @@ export class LeadersComponent {
 
     try {
       this.loading = true;
-      const response = await this.leaderService.addLeaderToCandidato('candidatoId', leader);
+      const response = await this.leaderService.addLeader('candidatoID', leader);
       this.toastr.success('Guardado Correctamente', 'Lider');
       this.createLeader.reset();
       this.loading = false;
@@ -83,42 +91,45 @@ export class LeadersComponent {
     }
   }
 
-  getLeaders() {
-    this.leaderService.getLeaders().subscribe(leaders => {
+  getLeaders(candidatoId: string) {
+    this.leaderService.getLeaders(candidatoId).subscribe(leaders => {
       this.leaders = leaders;
     });
   }
 
   async deleteLeader(leader: Leader) {
     if (confirm('¿Estás seguro que deseas eliminar al líder?')) {
-      const response = await this.leaderService.deleteLeader(leader);
+      const response = await this.leaderService.deleteLeader(leader, this.candidateId);
       this.toastr.success('Se ha eliminado correctamente', 'Lider');
     }
   }
 
-  update(id: string) {
-
-    const leader: any = {
+  update(liderId: string) {
+    const lider: any = {
       documento: this.createLeader.value.documento,
       nombre: this.createLeader.value.nombre,
       apellido: this.createLeader.value.apellido,
       direccion: this.createLeader.value.direccion,
       telefono: this.createLeader.value.telefono,
-    }
+    };
     this.loading = true;
-    this.leaderService.updateLeader(id, leader).then(() => {
-      this.loading = false;
-      this.toastr.success('Mdificado correctamente', 'Lider');
-      this.createLeader.reset();
-    })
-    this.router.navigate(['/lideres']);
+    this.leaderService.updateLeader(this.candidateId, liderId, lider)
+      .then(() => {
+        this.loading = false;
+        this.toastr.success('Modificado correctamente', 'Lider');
+        this.createLeader.reset();
+        this.router.navigate(['/lideres']);
+      })
+      .catch((error) => {
+        console.error('Error actualizando líder: ', error);
+        this.loading = false;
+      });
   }
 
   updateLeader() {
-    this.titulo = 'Editar Lider'
     if (this.id !== null) {
       this.loading = true;
-      this.leaderService.getLeader(this.id).subscribe(data => {
+      this.leaderService.getLeader(this.id, this.candidateId).subscribe(data => {
         this.loading = false;
         console.log(data.nombre);
         this.createLeader.setValue({
@@ -132,5 +143,24 @@ export class LeadersComponent {
     }
   }
 
+  async findCandidate() {
+    try {
+      this.hasCandidate = true;
+      const docRef = doc(this.firestore, 'Candidato', this.candidateId);
+      const docSnap = await getDoc(docRef);
+      this.hasCandidate = docSnap.exists();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+  backButton() {
+    if (this.aRoute.snapshot.paramMap.has('id')) {
+      this.backButtonVisible = true;
+    }
+  }
+
+  backRedirect(){
+    this.router.navigate(['/lideres']);
+  }
 }

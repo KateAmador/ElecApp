@@ -22,6 +22,8 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { Firestore } from 'firebase/firestore';
+import { CreateCandidateComponent } from './components/create.candidate/create.candidate.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,7 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
     LeadersComponent,
     SupportersComponent,
     WitnessesComponent,
+    CreateCandidateComponent,
   ],
   imports: [
     BrowserModule,
