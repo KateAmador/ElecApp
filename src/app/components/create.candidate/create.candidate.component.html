@@ -1,0 +1,42 @@
+<div class="container mt-4">
+  <div class="card">
+    <h1 class="card-header">{{titulo}}
+      <div *ngIf="loading" class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </h1>
+    <div class="card-body">
+
+      <!-- Formulario -->
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <form [formGroup]="createCandidate" (ngSubmit)="addEdit()">
+              <fieldset>
+                <span *ngIf="submitted && createCandidate.invalid" class="badge bg-danger">Todos los campos son
+                  obligatorios</span>
+                <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="documento"
+                  placeholder="Documento">
+                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
+                  placeholder="Nombre">
+                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
+                  placeholder="Apellido">
+                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="partido"
+                  placeholder="Partido">
+                <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="numero"
+                  placeholder="Numero">
+                <button type="submit" class="btn btn-dark mt-3" (click)="newCandidate()"
+                  [disabled]="disable">Agregar</button>
+                <button type="submit" class="btn btn-dark mt-3 btn-separator"
+                  [routerLink]="['/candidato']">Volver</button>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fin Formulario -->
+
+    </div>
+  </div>
+</div>
