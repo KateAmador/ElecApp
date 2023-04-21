@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'editar-lideres/:id', component: LeadersComponent },
   { path: 'seguidores', component: SupportersComponent },
   { path: 'testigos', component: WitnessesComponent },
+  { path: 'editar-testigos/:id', component: WitnessesComponent },
   { path: 'configuracion', component: SettingsComponent },
   { path: '**', redirectTo: 'inicio', pathMatch: 'full' },
 ];

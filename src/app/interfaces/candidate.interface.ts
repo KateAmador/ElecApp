@@ -1,5 +1,4 @@
-export default interface Leader {
-  //id?: string;
+export default interface Candidate {
   documento: string;
   nombre: string;
   apellido: string;

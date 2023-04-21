@@ -8,11 +8,16 @@
           <div class="col-md-4">
 
             <!-- Formulario -->
-            <form [formGroup]="createSupporter" (ngSubmit)="newSupporter()">
+            <form [formGroup]="createSupporter">
               <fieldset>
                 <legend>Agregar Seguidor</legend>
-                <span *ngIf="submitted && createSupporter.invalid" class="badge bg-danger">Todos los campos son obligatorios</span>
-                <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="id"
+                <span *ngIf="submitted && createSupporter.invalid" class="badge bg-danger">Todos los campos son
+                  obligatorios</span>
+                  <select class="form-select border-0 border-bottom mt-5" formControlName="lider">
+                    <option value="" selected disabled>Seleccionar líder</option>
+                    <option *ngFor="let leader of leaders" [value]="leader.id">{{leader.nombre}} {{leader.apellido}}</option>
+                  </select>
+                <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="id"
                   formControlName="id" placeholder="Documento">
                 <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
                   formControlName="nombre" placeholder="Nombre">
@@ -63,3 +68,6 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
