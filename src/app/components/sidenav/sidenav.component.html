@@ -2,8 +2,8 @@
   <div class="logo-container">
     <button class="logo" (click)="toggleCollapse()">E</button>
     <div class="logo-text" @fadeInOut *ngIf="collapsed">ElecApp</div>
-    <button class="btn-close btn-close-custom" style="color: blue;" @rotate *ngIf="collapsed"
-      (click)="closeSidenav()">
+    <button class="btn-close" @rotate *ngIf="collapsed" (click)="closeSidenav()">
+      <i class="bi bi-x-lg close-icon"></i>
     </button>
   </div>
   <ul class="sidenav-nav">
@@ -13,6 +13,23 @@
         <i class="sidenav-link-icon" [class]="data.icon"></i>
         <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
           {{data.label}}
+        </span>
+      </a>
+    </li>
+    <li class="sidenav-nav-item">
+      <a class="sidenav-nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        (click)="logout()">
+        <i class="sidenav-link-icon bi bi-box-arrow-right"></i>
+        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+          Cerrar Sesion
+        </span>
+      </a>
+    </li>
+    <li class="sidenav-nav-item user" >
+      <a class="sidenav-nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="sidenav-link-icon bi bi-box-arrow-right"></i>
+        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+          {{ userName }}
         </span>
       </a>
     </li>

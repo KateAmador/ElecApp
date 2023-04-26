@@ -1,6 +1,8 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
 import { navbarData } from './nav-data';
+import { UsersService } from '@services/users.service';
+import { Router } from '@angular/router';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -14,15 +16,15 @@ interface SideNavToggle {
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
-        style({opacity: 0}),
+        style({ opacity: 0 }),
         animate('350ms',
-          style({opacity: 1})
+          style({ opacity: 1 })
         )
       ]),
       transition(':leave', [
-        style({opacity: 1}),
+        style({ opacity: 1 }),
         animate('350ms',
-          style({opacity: 0})
+          style({ opacity: 0 })
         )
       ])
     ]),
@@ -30,8 +32,8 @@ interface SideNavToggle {
       transition(':enter', [
         animate('300ms',
           keyframes([
-            style({transform: 'rotate(0deg)', offset: '0'}),
-            style({transform: 'rotate(2turn)', offset: '1'})
+            style({ transform: 'rotate(0deg)', offset: '0' }),
+            style({ transform: 'rotate(2turn)', offset: '1' })
           ])
         )
       ])
@@ -39,6 +41,12 @@ interface SideNavToggle {
   ]
 })
 export class SidenavComponent implements OnInit {
+  userName: string | null = null;
+
+  constructor(
+    private userService: UsersService,
+    private router: Router,
+  ) { }
 
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
@@ -48,23 +56,32 @@ export class SidenavComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.screenWidth = window.innerWidth;
-    if(this.screenWidth <= 768 ) {
+    if (this.screenWidth <= 768) {
       this.collapsed = false;
-      this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+      this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
     }
   }
 
   ngOnInit(): void {
-      this.screenWidth = window.innerWidth;
+    this.screenWidth = window.innerWidth;
+    this.userName = this.userService.getCurrentUserName();
   }
 
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
-    this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
   }
 
   closeSidenav(): void {
     this.collapsed = false;
-    this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+  }
+
+  logout() {
+    this.userService.logout()
+      .then(() => {
+        this.router.navigate(['/inicio-sesion']);
+      })
+      .catch((error: any) => console.log(error));
   }
 }

@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
-// import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-// import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -15,16 +14,14 @@ interface SideNavToggle {
 export class AppComponent {
   title = 'sidenav';
 
+  constructor(private router: Router) {}
+
   isSideNavCollapsed = false;
   screenWidth = 0;
 
-  // firestore: Firestore = inject(Firestore)
-  // items$: Observable<any[]>;
-
-  // constructor() {
-  //   const aCollection = collection(this.firestore, 'items')
-  //   this.items$ = collectionData(aCollection);
-  // }
+  isLoginPage(): boolean {
+    return this.router.url === '/inicio-sesion' || this.router.url.includes('/recuperar');
+  }
 
   onToggleSideNav(data: SideNavToggle): void {
     this.screenWidth = data.screenWidth;
