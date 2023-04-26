@@ -29,6 +29,8 @@
                   placeholder="Direccion">
                 <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
                   placeholder="Telefono">
+                  <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
+                  placeholder="Email">
                 <button type="submit" class="btn btn-dark  mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
                 <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" (click)="backRedirect()" *ngIf="backButtonVisible">Volver</button>
               </fieldset>
@@ -49,6 +51,7 @@
                     <th scope="col">Apellido</th>
                     <th scope="col">Direccion</th>
                     <th scope="col">Telefono</th>
+                    <th scope="col">Email</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -59,6 +62,7 @@
                     <td>{{leader.apellido}}</td>
                     <td>{{leader.direccion}}</td>
                     <td>{{leader.telefono}}</td>
+                    <td>{{leader.email}}</td>
                     <td>
                       <a class="btn btn-sm btn-primary me-2" [routerLink]="['/editar-lideres/', leader.id]"><i
                           class="bi bi-pencil-square"></i></a>

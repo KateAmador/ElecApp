@@ -5,6 +5,7 @@ import { LeadersService } from '@services/leaders.service';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import Leader from 'src/app/interfaces/leader.interface';
+import { UsersService } from '@services/users.service';
 
 @Component({
   selector: 'app-leaders',
@@ -27,6 +28,7 @@ export class LeadersComponent {
   constructor(
     private fb: FormBuilder,
     private leaderService: LeadersService,
+    private userService: UsersService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router) {
@@ -36,7 +38,8 @@ export class LeadersComponent {
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       direccion: ['', Validators.required],
-      telefono: ['', Validators.required,]
+      telefono: ['', Validators.required],
+      email: ['', Validators.required]
     })
     this.id = this.aRoute.snapshot.paramMap.get('id');
     this.titulo = this.id ? 'Editar Lider' : 'Crear Lider';
@@ -67,17 +70,27 @@ export class LeadersComponent {
   }
 
   async newLeader() {
+    const password = Math.random().toString(36).substring(2, 8);
     const leader: any = {
       documento: this.createLeader.value.documento,
       nombre: this.createLeader.value.nombre,
       apellido: this.createLeader.value.apellido,
       direccion: this.createLeader.value.direccion,
       telefono: this.createLeader.value.telefono,
+      email: this.createLeader.value.email,
+      password: password,
+      rol: 'lider'
     }
+
+
 
     try {
       this.loading = true;
       const response = await this.leaderService.addLeader('candidatoID', leader);
+      this.userService.register(leader.email, leader.password).then(response => {
+        console.log(response);
+      })
+      .catch(error => console.log(error));
       this.toastr.success('Guardado Correctamente', 'Lider');
       this.createLeader.reset();
       this.loading = false;
