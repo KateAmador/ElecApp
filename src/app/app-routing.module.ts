@@ -4,22 +4,25 @@ import { CandidateComponent } from '@components/candidate/candidate.component';
 import { CreateCandidateComponent } from '@components/create.candidate/create.candidate.component';
 import { DashboardComponent } from '@components/dashboard/dashboard.component';
 import { LeadersComponent } from '@components/leaders/leaders.component';
-import { SettingsComponent } from '@components/settings/settings.component';
+import { LoginComponent } from '@components/login/login.component';
 import { SupportersComponent } from '@components/supporters/supporters.component';
 import { WitnessesComponent } from '@components/witnesses/witnesses.component';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { ResetPasswordComponent } from '@components/reset-password/reset-password.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-  { path: 'inicio', component: DashboardComponent },
-  { path: 'candidato', component: CandidateComponent },
-  { path: 'crear-candidato', component: CreateCandidateComponent },
-  { path: 'editar-candidato/:id', component: CreateCandidateComponent },
-  { path: 'lideres', component: LeadersComponent },
-  { path: 'editar-lideres/:id', component: LeadersComponent },
-  { path: 'seguidores', component: SupportersComponent },
-  { path: 'testigos', component: WitnessesComponent },
-  { path: 'editar-testigos/:id', component: WitnessesComponent },
-  { path: 'configuracion', component: SettingsComponent },
+  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
+  { path: 'inicio', component: DashboardComponent, ...authGuard() },
+  { path: 'candidato', component: CandidateComponent, ...authGuard() },
+  { path: 'crear-candidato', component: CreateCandidateComponent, ...authGuard() },
+  { path: 'editar-candidato/:id', component: CreateCandidateComponent, ...authGuard() },
+  { path: 'lideres', component: LeadersComponent, ...authGuard() },
+  { path: 'editar-lideres/:id', component: LeadersComponent, ...authGuard() },
+  { path: 'seguidores', component: SupportersComponent, ...authGuard() },
+  { path: 'testigos', component: WitnessesComponent, ...authGuard() },
+  { path: 'editar-testigos/:id', component: WitnessesComponent, ...authGuard() },
+  { path: 'inicio-sesion', component: LoginComponent },
+  { path: 'recuperar', component: ResetPasswordComponent },
   { path: '**', redirectTo: 'inicio', pathMatch: 'full' },
 ];
 
@@ -28,3 +31,7 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+function authGuard() {
+  return canActivate(() => redirectUnauthorizedTo(['/inicio-sesion']));
+}
