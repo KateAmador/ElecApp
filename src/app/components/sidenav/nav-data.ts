@@ -24,9 +24,4 @@ export const navbarData = [
     icon: 'bi bi-binoculars',
     label: 'Testigos'
   },
-  {
-    routeLink: 'configuracion',
-    icon: 'bi bi-gear',
-    label: 'Configuracion'
-  },
 ];
