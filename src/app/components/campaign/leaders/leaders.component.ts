@@ -13,6 +13,7 @@ import { UsersService } from '@services/users.service';
   styleUrls: ['./leaders.component.scss']
 })
 export class LeadersComponent {
+
   firestore: Firestore = inject(Firestore);
   createLeader: FormGroup;
   submitted = false;
@@ -39,7 +40,7 @@ export class LeadersComponent {
       apellido: ['', Validators.required],
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
-      email: ['', Validators.required]
+      email: ['', Validators.required, Validators.email]
     })
     this.id = this.aRoute.snapshot.paramMap.get('id');
     this.titulo = this.id ? 'Editar Lider' : 'Crear Lider';

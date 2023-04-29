@@ -1,4 +1,6 @@
-export const navbarData = [
+import { INavbarData } from "./helper";
+
+export const navbarData: INavbarData[] = [
   {
     routeLink: 'inicio',
     icon: 'bi bi-house',
@@ -10,18 +12,30 @@ export const navbarData = [
     label: 'Candidato'
   },
   {
-    routeLink: 'lideres',
-    icon: 'bi bi-person',
-    label: 'Lideres'
+    routeLink: 'campaña',
+    icon: 'bi bi-clipboard2-data',
+    label: 'Campaña',
+    items: [
+      {
+        routeLink: 'campaña/lideres',
+        label: 'Lideres'
+      },
+      {
+        routeLink: 'campaña/seguidores',
+        label: 'Seguidores'
+      }
+    ]
   },
   {
-    routeLink: 'seguidores',
-    icon: 'bi bi-people-fill',
-    label: 'Seguidores'
-  },
-  {
-    routeLink: 'testigos',
-    icon: 'bi bi-binoculars',
-    label: 'Testigos'
-  },
+    routeLink: 'elecciones',
+    icon: 'bi bi-file-text',
+    label: 'Elecciones',
+    items: [
+
+      {
+        routeLink: 'elecciones/testigos',
+        label: 'Testigos'
+      },
+    ]
+  }
 ];

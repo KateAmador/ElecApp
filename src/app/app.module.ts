@@ -11,9 +11,9 @@ import { BodyComponent } from '@components/body/body.component';
 import { SidenavComponent } from '@components/sidenav/sidenav.component';
 import { DashboardComponent } from '@components/dashboard/dashboard.component';
 import { CandidateComponent } from './components/candidate/candidate.component';
-import { LeadersComponent } from './components/leaders/leaders.component';
-import { SupportersComponent } from './components/supporters/supporters.component';
-import { WitnessesComponent } from './components/witnesses/witnesses.component';
+import { LeadersComponent } from './components/campaign/leaders/leaders.component';
+import { SupportersComponent } from './components/campaign/supporters/supporters.component';
+import { WitnessesComponent } from './components/elections/witnesses/witnesses.component';
 import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
@@ -22,6 +22,10 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { CreateCandidateComponent } from './components/create.candidate/create.candidate.component';
 import { LoginComponent } from './components/login/login.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CampaignComponent } from './components/campaign/campaign.component';
+import { ElectionsComponent } from './components/elections/elections.component';
+import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,9 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     CreateCandidateComponent,
     LoginComponent,
     ResetPasswordComponent,
+    CampaignComponent,
+    ElectionsComponent,
+    SublevelMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +53,8 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     ReactiveFormsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

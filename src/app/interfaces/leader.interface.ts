@@ -5,4 +5,9 @@ export default interface Leader {
   apellido: string;
   direccion: string;
   telefono: string;
+  uid?: string;
+  email: string | null;
+  contraseña: string | null;
+  edad: string | null;
+  rol: 'lider';
 }
