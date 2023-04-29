@@ -68,6 +68,8 @@ export class CreateCandidateComponent {
       apellido: this.createCandidate.value.apellido,
       partido: this.createCandidate.value.partido,
       numero: this.createCandidate.value.numero,
+      email: this.createCandidate.value.email,
+      rol: 'candidato'
     };
 
     try {
@@ -102,7 +104,7 @@ export class CreateCandidateComponent {
       this.loading = false;
       this.toastr.success('Mdificado correctamente', 'Candidato');
       this.createCandidate.reset();
-    })
+    });
     this.router.navigate(['/candidato']);
     this.disable = false;
   }

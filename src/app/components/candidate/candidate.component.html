@@ -5,12 +5,12 @@
       <button *ngIf="hasCandidate" (click)="editRedirect()"type="submit" class="btn btn-dark  mt-2 float-end">Editar Candidato</button>
     </h1>
     <div class="card-body">
-      <div class="card m-5 col-4 mx-auto">
+      <div class="card m-5 col-3 mx-auto">
         <div class="card-body">
-          <h3 class="card-title" *ngFor="let item of items$ | async">{{item.nombre}} {{item.apellido}}</h3>
-          <p class="card-text" *ngFor="let item of items$ | async">Partido: {{item.partido}}</p>
-          <p class="card-text" *ngFor="let item of items$ | async">Cedula: {{item.documento}}</p>
-          <p class="card-text" *ngFor="let item of items$ | async">Numero: {{item.numero}}</p>
+          <h3 class="card-title " *ngFor="let item of items$ | async">{{item.nombre}} {{item.apellido}}</h3>
+          <p class="card-text " *ngFor="let item of items$ | async"><strong>Partido:</strong> {{item.partido}}</p>
+          <p class="card-text " *ngFor="let item of items$ | async"><strong>Cedula:</strong> {{item.documento}}</p>
+          <p class="card-text " *ngFor="let item of items$ | async"><strong>Numero:</strong> {{item.numero}}</p>
         </div>
       </div>
     </div>
