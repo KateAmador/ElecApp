@@ -9,7 +9,7 @@
 
       <div class="container mt-5">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
 
             <!-- Formulario -->
             <form [formGroup]="createLeader" (ngSubmit)="addEdit()">
@@ -32,13 +32,13 @@
                   <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
                   placeholder="Email">
                 <button type="submit" class="btn btn-dark  mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
-                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" (click)="backRedirect()" *ngIf="backButtonVisible">Volver</button>
+                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" [routerLink]="['/campaña/lideres']" *ngIf="backButtonVisible">Volver</button>
               </fieldset>
             </form>
             <!-- Fin Formulario -->
 
           </div>
-          <div class="col-md-8">
+          <div class="col-md-9">
             <div class="table-responsive">
 
               <!-- Tabla -->
@@ -64,7 +64,7 @@
                     <td>{{leader.telefono}}</td>
                     <td>{{leader.email}}</td>
                     <td>
-                      <a class="btn btn-sm btn-primary me-2" [routerLink]="['/editar-lideres/', leader.id]"><i
+                      <a class="btn btn-sm btn-primary" [routerLink]="['/editar-lideres/', leader.id]"><i
                           class="bi bi-pencil-square"></i></a>
                       <a (click)="deleteLeader(leader)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                     </td>

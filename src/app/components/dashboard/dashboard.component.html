@@ -3,7 +3,7 @@
     <h1 class="card-header">Dashboard</h1>
     <div class="card-body">
       <div class="row">
-        <div class="col-md-4 col-lg-5">
+        <div class="col-md-12 col-lg-5">
           <div class="card m-4 overflow-hidden">
             <div class="card-body">
               <ngx-charts-advanced-pie-chart [view]="view" [scheme]="colorScheme" [results]="single" [gradient]="gradient"
@@ -12,11 +12,11 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 col-lg-6">
+        <div class="col-md-12 col-lg-7">
           <div class="card m-4 overflow-hidden">
             <div class="card-body">
               <ngx-charts-number-card [view]="viewCard" [scheme]="colorSchemeCard" [results]="singleCard"
-                [cardColor]="cardColor"   (select)="onSelectCard($event)" style="color: #212529;">
+                [cardColor]="cardColor" (select)="onSelectCard($event)" style="color: #212529;">
               </ngx-charts-number-card>
             </div>
           </div>

@@ -34,7 +34,7 @@
                 <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="puesto"
                   placeholder="Puesto">
                 <button type="submit" class="btn btn-dark mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
-                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" (click)="backRedirect()"
+                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" [routerLink]="['/elecciones/testigos']"
                   *ngIf="backButtonVisible">Volver</button>
               </fieldset>
             </form>
