@@ -130,9 +130,9 @@ export class LeadersComponent {
     this.leaderService.updateLeader(this.candidateId, liderId, lider)
       .then(() => {
         this.loading = false;
-        this.toastr.success('Modificado correctamente', 'Lider');
         this.createLeader.reset();
-        this.router.navigate(['/lideres']);
+        this.router.navigate(['/campaña/lideres']);
+        this.toastr.success('Modificado correctamente', 'Lider');
       })
       .catch((error) => {
         console.error('Error actualizando líder: ', error);
@@ -172,9 +172,5 @@ export class LeadersComponent {
     if (this.aRoute.snapshot.paramMap.has('id')) {
       this.backButtonVisible = true;
     }
-  }
-
-  backRedirect(){
-    this.router.navigate(['/lideres']);
   }
 }

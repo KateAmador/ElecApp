@@ -123,15 +123,17 @@ export class WitnessesComponent {
     this.witnessService.updateWitness(this.candidateId, witnessId, witness)
       .then(() => {
         this.loading = false;
-        this.toastr.success('Modificado correctamente', 'Testigo');
         this.createWitness.reset();
-        this.router.navigate(['/testigos']);
+        this.router.navigate(['/elecciones/testigos']);
+        this.toastr.success('Modificado correctamente', 'Testigo');
       })
       .catch((error) => {
         console.error('Error actualizando testigo: ', error);
         this.loading = false;
       });
   }
+
+
 
   updateWitness() {
     if (this.id !== null) {
@@ -167,9 +169,5 @@ export class WitnessesComponent {
     if (this.aRoute.snapshot.paramMap.has('id')) {
       this.backButtonVisible = true;
     }
-  }
-
-  backRedirect(){
-    this.router.navigate(['/testigos']);
   }
 }
