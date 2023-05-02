@@ -21,8 +21,16 @@ export class AppComponent {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
+  pages(): boolean{
+    return this.router.url === '/inicio-sesion' || this.router.url === '/recuperar';
+  }
+
   isLoginPage(): boolean {
-    return this.router.url === '/inicio-sesion' || this.router.url.includes('/recuperar');
+    return this.router.url === '/inicio-sesion';
+  }
+
+  isResetPage(): boolean {
+    return this.router.url === '/recuperar';
   }
 
   onToggleSideNav(data: SideNavToggle): void {

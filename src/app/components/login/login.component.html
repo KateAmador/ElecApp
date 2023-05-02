@@ -10,10 +10,10 @@
         <form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
           <div class="form-group mt-5">
             <input type="email" class="form-control border-0 border-bottom mt-5" formControlName="email"
-              placeholder="Email" [class.is-invalid]="submitted || formLogin.get('email')">
-            <div *ngIf="submitted || formLogin.get('email')" class="invalid-feedback">
+              placeholder="Email">
+            <!-- <div *ngIf="submitted || formLogin.get('email')" class="invalid-feedback">
               El email ingresado no es válido.
-            </div>
+            </div> -->
           </div>
           <div class="form-group mt-4">
             <input type="password" class="form-control border-0 border-bottom mt-4" formControlName="password"

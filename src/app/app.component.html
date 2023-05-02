@@ -1,13 +1,12 @@
-<ng-container *ngIf="!isLoginPage()">
+<ng-container *ngIf="!pages()">
   <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+
+  <div class="main-content">
+    <app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-body>
+  </div>
 </ng-container>
 
-<div *ngIf="isLoginPage()">
-  <!-- Aquí va el formulario de inicio de sesión -->
-  <!-- <app-login></app-login> -->
-</div>
-
-<app-body
-  [collapsed]="isSideNavCollapsed"
-  [screenWidth]="screenWidth"
-></app-body>
+<ng-container >
+  <app-login *ngIf="isLoginPage()"></app-login>
+  <app-reset-password *ngIf="isResetPage()"></app-reset-password>
+</ng-container>
