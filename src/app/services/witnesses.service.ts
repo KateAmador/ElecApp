@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, docData, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, docData, setDoc, updateDoc } from '@angular/fire/firestore';
 import Witness from '../interfaces/witnesses.interface';
 import { Observable } from 'rxjs';
 
@@ -10,10 +10,16 @@ export class WitnessesService {
 
   constructor(private firestore: Firestore) { }
 
+  // addWitness(candidateId: string, witness: Witness) {
+  //   const candidateDocRef = doc(this.firestore, `Candidato/${candidateId}`);
+  //   const witnessColRef = collection(candidateDocRef, 'Testigos');
+  //   return addDoc(witnessColRef, witness);
+  // }
+
   addWitness(candidateId: string, witness: Witness) {
     const candidateDocRef = doc(this.firestore, `Candidato/${candidateId}`);
-    const witnessColRef = collection(candidateDocRef, 'Testigos');
-    return addDoc(witnessColRef, witness);
+    const witnessesColRef = collection(candidateDocRef, 'Testigos');
+    return setDoc(doc(witnessesColRef, witness.uid), witness);
   }
 
   getWitnesses(candidateId: string): Observable<Witness[]> {

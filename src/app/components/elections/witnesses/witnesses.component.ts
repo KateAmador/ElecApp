@@ -5,6 +5,7 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { WitnessesService } from '@services/witnesses.service';
 import { ToastrService } from 'ngx-toastr';
 import Witness from 'src/app/interfaces/witnesses.interface';
+import { UsersService } from '@services/users.service';
 
 @Component({
   selector: 'app-witnesses',
@@ -27,6 +28,7 @@ export class WitnessesComponent {
   constructor(
     private fb: FormBuilder,
     private witnessService: WitnessesService,
+    private userService: UsersService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router) {
@@ -39,7 +41,10 @@ export class WitnessesComponent {
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
       mesa: ['', Validators.required],
-      puesto: ['', Validators.required]
+      puesto: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required],
+      email: ['', Validators.required],
+      contraseña: ['', Validators.required]
     })
     this.id = this.aRoute.snapshot.paramMap.get('id');
     this.titulo = this.id ? 'Editar Testigo' : 'Crear Testigo';
@@ -77,12 +82,21 @@ export class WitnessesComponent {
       direccion: this.createWitness.value.direccion,
       telefono: this.createWitness.value.telefono,
       mesa: this.createWitness.value.mesa,
-      puesto: this.createWitness.value.puesto
+      puesto: this.createWitness.value.puesto,
+      fechaNacimiento: this.createWitness.value.fechaNacimiento,
+      email: this.createWitness.value.email,
+      contraseña: this.createWitness.value.contraseña,
+      rol: 'testigo'
     }
 
     try {
       this.loading = true;
+
+      const userCredential = await this.userService.register(witness.email, witness.contraseña);
+      const uid = userCredential.user.uid;
+      witness.uid = uid;
       const response = await this.witnessService.addWitness(this.candidateId, witness);
+
       this.toastr.success('Guardado Correctamente', 'Testigo');
       this.createWitness.reset();
       this.loading = false;
@@ -147,8 +161,11 @@ export class WitnessesComponent {
           apellido: data.apellido,
           direccion: data.direccion,
           telefono: data.telefono,
+          fechaNacimiento: data.fechaNacimiento,
           mesa: data.mesa,
-          puesto: data.puesto
+          puesto: data.puesto,
+          email: data.email,
+          contraseña: data.contraseña
         })
       })
     }

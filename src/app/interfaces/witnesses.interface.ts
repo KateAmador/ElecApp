@@ -5,6 +5,11 @@ export default interface Witness {
   apellido: string;
   direccion: string;
   telefono: string;
+  uid?: string;
+  email: string;
   mesa: string;
   puesto: string;
+  contraseña: string;
+  fechaNacimiento: string;
+  rol: 'testigo;'
 }

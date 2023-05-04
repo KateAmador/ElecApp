@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'firebase/firestore'
-import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, docData, updateDoc } from '@angular/fire/firestore';
-import Leader from '../interfaces/leader.interface';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, docData, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Leader } from '../interfaces/leader.interface';
 import { Observable } from 'rxjs';
 
 
@@ -12,10 +12,16 @@ export class LeadersService {
 
   constructor(private firestore: Firestore) { }
 
+  // addLeader(candidateId: string, leader: Leader) {
+  //   const candidatoDocRef = doc(this.firestore, `Candidato/${candidateId}`);
+  //   const lideresColRef = collection(candidatoDocRef, 'Lideres');
+  //   return addDoc(lideresColRef, leader);
+  // }
+
   addLeader(candidateId: string, leader: Leader) {
-    const candidatoDocRef = doc(this.firestore, `Candidato/${candidateId}`);
-    const lideresColRef = collection(candidatoDocRef, 'Lideres');
-    return addDoc(lideresColRef, leader);
+    const candidateDocRef = doc(this.firestore, `Candidato/${candidateId}`);
+    const leadersColRef = collection(candidateDocRef, 'Lideres');
+    return setDoc(doc(leadersColRef, leader.uid), leader);
   }
 
   getLeaders(candidateId: string): Observable<Leader[]> {

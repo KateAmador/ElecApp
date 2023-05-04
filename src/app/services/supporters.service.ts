@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, collectionData, docData } from '@angular/fire/firestore';
 import { Firestore, doc, collection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import Leader from '../interfaces/leader.interface';
+import { Leader } from '../interfaces/leader.interface';
 import Supporter from '../interfaces/supporters.interface';
 
 @Injectable({

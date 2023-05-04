@@ -29,10 +29,15 @@
                   placeholder="Direccion">
                 <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
                   placeholder="Telefono">
-                  <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
+                <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
+                  placeholder="FechaNacimiento">
+                <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
                   placeholder="Email">
+                <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
+                  placeholder="Contraseña">
                 <button type="submit" class="btn btn-dark  mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
-                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" [routerLink]="['/campaña/lideres']" *ngIf="backButtonVisible">Volver</button>
+                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator"
+                  [routerLink]="['/campaña/lideres']" *ngIf="backButtonVisible">Volver</button>
               </fieldset>
             </form>
             <!-- Fin Formulario -->
@@ -51,6 +56,7 @@
                     <th scope="col">Apellido</th>
                     <th scope="col">Direccion</th>
                     <th scope="col">Telefono</th>
+                    <th scope="col">F. Nacimiento</th>
                     <th scope="col">Email</th>
                     <th scope="col"></th>
                   </tr>
@@ -62,6 +68,7 @@
                     <td>{{leader.apellido}}</td>
                     <td>{{leader.direccion}}</td>
                     <td>{{leader.telefono}}</td>
+                    <td>{{leader.fechaNacimiento}}</td>
                     <td>{{leader.email}}</td>
                     <td>
                       <a class="btn btn-sm btn-primary" [routerLink]="['/editar-lideres/', leader.id]"><i

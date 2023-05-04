@@ -29,13 +29,19 @@
                   placeholder="Direccion">
                 <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
                   placeholder="Telefono">
+                <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
+                  placeholder="FechaNacimiento">
                 <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="mesa"
                   placeholder="N° Mesa">
                 <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="puesto"
                   placeholder="Puesto">
+                <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
+                  placeholder="Email">
+                <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
+                  placeholder="Contraseña">
                 <button type="submit" class="btn btn-dark mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
-                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator" [routerLink]="['/elecciones/testigos']"
-                  *ngIf="backButtonVisible">Volver</button>
+                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator"
+                  [routerLink]="['/elecciones/testigos']" *ngIf="backButtonVisible">Volver</button>
               </fieldset>
             </form>
             <!-- Fin Formulario -->
@@ -54,8 +60,10 @@
                     <th scope="col">Apellido</th>
                     <th scope="col">Direccion</th>
                     <th scope="col">Telefono</th>
+                    <th scope="col">F. Nacimiento</th>
                     <th scope="col">N° Mesa</th>
                     <th scope="col">Puesto</th>
+                    <th scope="col">Email</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
@@ -66,8 +74,10 @@
                     <td>{{witness.apellido}}</td>
                     <td>{{witness.direccion}}</td>
                     <td>{{witness.telefono}}</td>
+                    <td>{{witness.fechaNacimiento}}</td>
                     <td>{{witness.mesa}}</td>
                     <td>{{witness.puesto}}</td>
+                    <td>{{witness.email}}</td>
                     <td>
                       <a class="btn btn-sm btn-primary me-2" [routerLink]="['/editar-testigos/', witness.id]"><i
                           class="bi bi-pencil-square"></i></a>

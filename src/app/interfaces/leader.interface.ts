@@ -1,4 +1,4 @@
-export default interface Leader {
+export interface Leader {
   id?: string;
   documento: string;
   nombre: string;
@@ -6,8 +6,8 @@ export default interface Leader {
   direccion: string;
   telefono: string;
   uid?: string;
-  email: string | null;
-  contraseña: string | null;
-  edad: string | null;
+  email: string;
+  contraseña: string;
+  fechaNacimiento: string;
   rol: 'lider';
 }
