@@ -31,6 +31,8 @@
                   placeholder="Telefono">
                 <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
                   placeholder="FechaNacimiento">
+                  <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="genero"
+                  placeholder="Genero">
                 <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
                   placeholder="Email">
                 <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
@@ -57,6 +59,7 @@
                     <th scope="col">Direccion</th>
                     <th scope="col">Telefono</th>
                     <th scope="col">F. Nacimiento</th>
+                    <th scope="col">Genero</th>
                     <th scope="col">Email</th>
                     <th scope="col"></th>
                   </tr>
@@ -69,6 +72,7 @@
                     <td>{{leader.direccion}}</td>
                     <td>{{leader.telefono}}</td>
                     <td>{{leader.fechaNacimiento}}</td>
+                    <td>{{leader.genero}}</td>
                     <td>{{leader.email}}</td>
                     <td>
                       <a class="btn btn-sm btn-primary" [routerLink]="['/editar-lideres/', leader.id]"><i

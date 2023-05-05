@@ -9,5 +9,6 @@ export interface Leader {
   email: string;
   contraseña: string;
   fechaNacimiento: string;
+  genero: string;
   rol: 'lider';
 }

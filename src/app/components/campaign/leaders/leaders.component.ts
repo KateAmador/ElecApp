@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LeadersService } from '@services/leaders.service';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { Leader } from 'src/app/interfaces/leader.interface';
@@ -29,7 +28,6 @@ export class LeadersComponent {
 
   constructor(
     private fb: FormBuilder,
-    private leaderService: LeadersService,
     private userService: UsersService,
     private loginService: LoginService,
     private toastr: ToastrService,
@@ -43,6 +41,7 @@ export class LeadersComponent {
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
+      genero: ['', Validators.required],
       email: ['', Validators.required],
       contraseña: ['', Validators.required]
     })
@@ -75,23 +74,13 @@ export class LeadersComponent {
   }
 
   async newLeader() {
-    const leader: any = {
-      documento: this.createLeader.value.documento,
-      nombre: this.createLeader.value.nombre,
-      apellido: this.createLeader.value.apellido,
-      direccion: this.createLeader.value.direccion,
-      telefono: this.createLeader.value.telefono,
-      fechaNacimiento: this.createLeader.value.fechaNacimiento,
-      email: this.createLeader.value.email,
-      contraseña: this.createLeader.value.contraseña,
-      rol: 'lider'
-    }
+    const leader = this.getValues();
     try {
       this.loading = true;
       const userCredential = await this.loginService.register(leader.email, leader.contraseña);
       const uid = userCredential.user.uid;
       leader.uid = uid;
-      const response = await this.leaderService.addLeader(this.candidateId, leader);
+      const response = await this.userService.addUser(this.candidateId, leader);
 
       this.toastr.success('Guardado Correctamente', 'Lider');
       this.createLeader.reset();
@@ -105,32 +94,25 @@ export class LeadersComponent {
     }
   }
 
-  getLeaders(candidatoId: string) {
-    this.leaderService.getLeaders(candidatoId).subscribe(leaders => {
+  getLeaders(candidateId: string) {
+    const leader = this.getValues();
+    this.userService.getUsers(candidateId, leader).subscribe(leaders => {
       this.leaders = leaders;
     });
   }
 
   async deleteLeader(leader: Leader) {
     if (confirm('¿Estás seguro que deseas eliminar al líder?')) {
-      const response = await this.leaderService.deleteLeader(leader, this.candidateId);
+      const response = await this.userService.deleteUser(leader, this.candidateId);
       this.toastr.success('Se ha eliminado correctamente', 'Lider');
+      console.log(response);
     }
   }
 
   update(liderId: string) {
-    const lider: any = {
-      documento: this.createLeader.value.documento,
-      nombre: this.createLeader.value.nombre,
-      apellido: this.createLeader.value.apellido,
-      direccion: this.createLeader.value.direccion,
-      telefono: this.createLeader.value.telefono,
-      fechaNacimiento: this.createLeader.value.fechaNacimiento,
-      email: this.createLeader.value.email,
-      contraseña: this.createLeader.value.contraseña
-    };
+    const leader = this.getValues();
     this.loading = true;
-    this.leaderService.updateLeader(this.candidateId, liderId, lider)
+    this.userService.updateUser(this.candidateId, liderId, leader, leader)
       .then(() => {
         this.loading = false;
         this.createLeader.reset();
@@ -144,21 +126,28 @@ export class LeadersComponent {
   }
 
   updateLeader() {
+    const leader = this.getValues();
     if (this.id !== null) {
       this.loading = true;
-      this.leaderService.getLeader(this.id, this.candidateId).subscribe(data => {
+      this.userService.getUser(this.id, this.candidateId, leader).subscribe(data => {
         this.loading = false;
-        console.log(data.nombre);
-        this.createLeader.setValue({
-          documento: data.documento,
-          nombre: data.nombre,
-          apellido: data.apellido,
-          direccion: data.direccion,
-          telefono: data.telefono,
-          fechaNacimiento: data.fechaNacimiento,
-          email: data.email,
-          contraseña: data.contraseña
-        });
+        if (Array.isArray(data) && data.length > 0) {
+          const firstItem = data[0];
+          console.log(firstItem.nombre);
+          this.createLeader.setValue({
+            documento: firstItem.documento,
+            nombre: firstItem.nombre,
+            apellido: firstItem.apellido,
+            direccion: firstItem.direccion,
+            telefono: firstItem.telefono,
+            fechaNacimiento: firstItem.fechaNacimiento || '',
+            genero: firstItem.genero,
+            email: firstItem.email,
+            contraseña: firstItem.contraseña || ''
+          });
+        } else {
+          console.log('No se encontró ningún usuario');
+        }
       });
     }
   }
@@ -178,5 +167,21 @@ export class LeadersComponent {
     if (this.aRoute.snapshot.paramMap.has('id')) {
       this.backButtonVisible = true;
     }
+  }
+
+  getValues(): Leader {
+    const leader: Leader = {
+      documento: this.createLeader.value.documento,
+      nombre: this.createLeader.value.nombre,
+      apellido: this.createLeader.value.apellido,
+      direccion: this.createLeader.value.direccion,
+      telefono: this.createLeader.value.telefono,
+      fechaNacimiento: this.createLeader.value.fechaNacimiento,
+      email: this.createLeader.value.email,
+      contraseña: this.createLeader.value.contraseña,
+      genero: this.createLeader.value.genero,
+      rol: 'lider'
+    };
+    return leader;
   }
 }
