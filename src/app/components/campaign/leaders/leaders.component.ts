@@ -6,6 +6,7 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { Leader } from 'src/app/interfaces/leader.interface';
 import { UsersService } from '@services/users.service';
+import { LoginService } from '@services/login.service';
 
 @Component({
   selector: 'app-leaders',
@@ -30,6 +31,7 @@ export class LeadersComponent {
     private fb: FormBuilder,
     private leaderService: LeadersService,
     private userService: UsersService,
+    private loginService: LoginService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router) {
@@ -86,7 +88,7 @@ export class LeadersComponent {
     }
     try {
       this.loading = true;
-      const userCredential = await this.userService.register(leader.email, leader.contraseña);
+      const userCredential = await this.loginService.register(leader.email, leader.contraseña);
       const uid = userCredential.user.uid;
       leader.uid = uid;
       const response = await this.leaderService.addLeader(this.candidateId, leader);

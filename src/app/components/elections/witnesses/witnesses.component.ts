@@ -6,6 +6,7 @@ import { WitnessesService } from '@services/witnesses.service';
 import { ToastrService } from 'ngx-toastr';
 import Witness from 'src/app/interfaces/witnesses.interface';
 import { UsersService } from '@services/users.service';
+import { LoginService } from '@services/login.service';
 
 @Component({
   selector: 'app-witnesses',
@@ -29,6 +30,7 @@ export class WitnessesComponent {
     private fb: FormBuilder,
     private witnessService: WitnessesService,
     private userService: UsersService,
+    private loginService: LoginService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router) {
@@ -92,7 +94,7 @@ export class WitnessesComponent {
     try {
       this.loading = true;
 
-      const userCredential = await this.userService.register(witness.email, witness.contraseña);
+      const userCredential = await this.loginService.register(witness.email, witness.contraseña);
       const uid = userCredential.user.uid;
       witness.uid = uid;
       const response = await this.witnessService.addWitness(this.candidateId, witness);

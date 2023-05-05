@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsersService } from '@services/users.service';
+import { LoginService } from '@services/login.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -15,7 +15,7 @@ export class ResetPasswordComponent {
 
 
   constructor(
-    private userService: UsersService,
+    private loginService: LoginService,
     private router: Router,
     private fb: FormBuilder,
     private toastr: ToastrService) {
@@ -29,7 +29,7 @@ export class ResetPasswordComponent {
     this.submitted = true;
     const email = this.form.controls['email'].value;
 
-    this.userService.resetPassword(email)
+    this.loginService.resetPassword(email)
       .then(() => {
         console.log('Correo de recuperación enviado');
         this.toastr.success('Revise su correo', 'Email Enviado', { positionClass: 'toast-top-right'});

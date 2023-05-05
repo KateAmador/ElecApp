@@ -1,7 +1,7 @@
-  import { Component, Input } from '@angular/core';
-  import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+  import { Component } from '@angular/core';
+  import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   import { Router } from '@angular/router';
-  import { UsersService } from '@services/users.service';
+  import { LoginService } from '@services/login.service';
   import { ToastrService } from 'ngx-toastr';
 
   @Component({
@@ -14,7 +14,7 @@
     submitted = false;
 
     constructor(
-      private userService: UsersService,
+      private loginService: LoginService,
       private fb: FormBuilder,
       private router: Router,
       private toastr: ToastrService) {
@@ -27,7 +27,7 @@
 
     onSubmit() {
       this.submitted = true;
-      this.userService.login(this.formLogin.value)
+      this.loginService.login(this.formLogin.value)
         .then(response => {
           console.log(response);
           this.router.navigate(['/inicio']);
