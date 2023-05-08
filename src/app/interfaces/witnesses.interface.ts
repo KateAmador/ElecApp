@@ -1,4 +1,4 @@
-export default interface Witness {
+export interface Witness {
   id?: string;
   documento: string;
   nombre: string;
@@ -11,5 +11,6 @@ export default interface Witness {
   puesto: string;
   contraseña: string;
   fechaNacimiento: string;
-  rol: 'testigo;'
+  genero: string;
+  rol: 'testigo'
 }

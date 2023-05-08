@@ -2,9 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
-import { WitnessesService } from '@services/witnesses.service';
 import { ToastrService } from 'ngx-toastr';
-import Witness from 'src/app/interfaces/witnesses.interface';
+import { Witness } from 'src/app/interfaces/witnesses.interface';
 import { UsersService } from '@services/users.service';
 import { LoginService } from '@services/login.service';
 
@@ -28,7 +27,6 @@ export class WitnessesComponent {
 
   constructor(
     private fb: FormBuilder,
-    private witnessService: WitnessesService,
     private userService: UsersService,
     private loginService: LoginService,
     private toastr: ToastrService,
@@ -68,7 +66,6 @@ export class WitnessesComponent {
     if (this.createWitness.invalid || allFieldsEmpty) {
       return;
     }
-
     if (this.id === null) {
       this.newWitness();
     } else {
@@ -77,27 +74,14 @@ export class WitnessesComponent {
   }
 
   async newWitness() {
-    const witness: any = {
-      documento: this.createWitness.value.documento,
-      nombre: this.createWitness.value.nombre,
-      apellido: this.createWitness.value.apellido,
-      direccion: this.createWitness.value.direccion,
-      telefono: this.createWitness.value.telefono,
-      mesa: this.createWitness.value.mesa,
-      puesto: this.createWitness.value.puesto,
-      fechaNacimiento: this.createWitness.value.fechaNacimiento,
-      email: this.createWitness.value.email,
-      contraseña: this.createWitness.value.contraseña,
-      rol: 'testigo'
-    }
-
+    const witness = this.getValues();
     try {
       this.loading = true;
 
       const userCredential = await this.loginService.register(witness.email, witness.contraseña);
       const uid = userCredential.user.uid;
       witness.uid = uid;
-      const response = await this.witnessService.addWitness(this.candidateId, witness);
+      const response = await this.userService.addUser(this.candidateId, witness);
 
       this.toastr.success('Guardado Correctamente', 'Testigo');
       this.createWitness.reset();
@@ -113,30 +97,24 @@ export class WitnessesComponent {
   }
 
   getWitnesses(candidateId: string) {
-    this.witnessService.getWitnesses(candidateId).subscribe(witness => {
+    const witness = this.getValues();
+    this.userService.getUsers(candidateId, witness).subscribe(witness => {
       this.witnesses = witness;
     });
   }
 
   async deleteWitness(witness: Witness) {
     if (confirm('¿Estás seguro que deseas eliminar al testigo?')) {
-      const response = await this.witnessService.deleteWitness(witness, this.candidateId);
+      const response = await this.userService.deleteUser(witness, this.candidateId);
       this.toastr.success('Se ha eliminado correctamente', 'Testigo');
+      console.log(response);
     }
   }
 
   update(witnessId: string) {
-    const witness: any = {
-      documento: this.createWitness.value.documento,
-      nombre: this.createWitness.value.nombre,
-      apellido: this.createWitness.value.apellido,
-      direccion: this.createWitness.value.direccion,
-      telefono: this.createWitness.value.telefono,
-      mesa: this.createWitness.value.mesa,
-      puesto: this.createWitness.value.puesto
-    };
+    const witness = this.getValues();
     this.loading = true;
-    this.witnessService.updateWitness(this.candidateId, witnessId, witness)
+    this.userService.updateUser(this.candidateId, witnessId, witness, witness)
       .then(() => {
         this.loading = false;
         this.createWitness.reset();
@@ -152,26 +130,38 @@ export class WitnessesComponent {
 
 
   updateWitness() {
+    const witness = this.getValues();
     if (this.id !== null) {
       this.loading = true;
-      this.witnessService.getWitness(this.id, this.candidateId).subscribe(data => {
+      this.userService.getUser(this.id, this.candidateId, witness).subscribe(data => {
         this.loading = false;
-        console.log(data.nombre);
-        this.createWitness.setValue({
-          documento: data.documento,
-          nombre: data.nombre,
-          apellido: data.apellido,
-          direccion: data.direccion,
-          telefono: data.telefono,
-          fechaNacimiento: data.fechaNacimiento,
-          mesa: data.mesa,
-          puesto: data.puesto,
-          email: data.email,
-          contraseña: data.contraseña
-        })
-      })
+        if (Array.isArray(data) && data.length > 0) {
+          const firstItem = data[0];
+          console.log(firstItem.nombre);
+          if ('puesto' in firstItem) { // Check if the 'puesto' property exists in firstItem
+            this.createWitness.setValue({
+              documento: firstItem.documento,
+              nombre: firstItem.nombre,
+              apellido: firstItem.apellido,
+              direccion: firstItem.direccion,
+              telefono: firstItem.telefono,
+              fechaNacimiento: firstItem.fechaNacimiento,
+              genero: firstItem.genero,
+              mesa: firstItem.mesa,
+              puesto: firstItem.puesto,
+              email: firstItem.email,
+              contraseña: firstItem.contraseña
+            })
+          } else {
+            console.log('El objeto no es un Witness');
+          }
+        } else {
+          console.log('No se encontró ningún usuario');
+        }
+      });
     }
   }
+
 
   async findCandidate() {
     try {
@@ -188,5 +178,23 @@ export class WitnessesComponent {
     if (this.aRoute.snapshot.paramMap.has('id')) {
       this.backButtonVisible = true;
     }
+  }
+
+  getValues(): Witness {
+    const witness: Witness = {
+      documento: this.createWitness.value.documento,
+      nombre: this.createWitness.value.nombre,
+      apellido: this.createWitness.value.apellido,
+      direccion: this.createWitness.value.direccion,
+      telefono: this.createWitness.value.telefono,
+      mesa: this.createWitness.value.mesa,
+      puesto: this.createWitness.value.puesto,
+      fechaNacimiento: this.createWitness.value.fechaNacimiento,
+      genero: this.createWitness.value.genero,
+      email: this.createWitness.value.email,
+      contraseña: this.createWitness.value.contraseña,
+      rol: 'testigo'
+    };
+    return witness;
   }
 }

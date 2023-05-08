@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, doc, collection, setDoc, collectionData, deleteDoc, docData, updateDoc } from '@angular/fire/firestore';
 import { Leader } from '../interfaces/leader.interface';
-import Witness from '../interfaces/witnesses.interface';
+import { Witness } from '../interfaces/witnesses.interface';
 import { Observable, map, of } from 'rxjs';
 
 @Injectable({
