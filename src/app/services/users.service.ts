@@ -44,6 +44,9 @@ export class UsersService {
     } else if (user.rol === 'testigo') {
       const witnessDocRef = doc(this.firestore, `Candidato/${candidateId}/Testigos/${user.id}`);
       return deleteDoc(witnessDocRef);
+    } else {
+      console.log('Rol de usuario no válido');
+      return null;
     }
   }
 

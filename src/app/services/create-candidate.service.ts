@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, doc, docData, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, docData, setDoc, updateDoc } from '@angular/fire/firestore';
 import Candidate from '../interfaces/candidate.interface';
 import { Observable } from 'rxjs';
 import Leader from '../interfaces/candidate.interface';
