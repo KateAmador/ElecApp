@@ -1,95 +1,125 @@
-<div class="container mt-4">
-  <div class="card">
-    <h1 class="card-header">Testigos
-      <div *ngIf="loading" class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
+<div class="card-body">
+  <div class="container mt-5">
+    <div class="row">
+
+      <h1 class="title">TESTIGOS</h1>
+
+      <legend>{{titulo}}
+        <span class="badge bg-warning mt-2 mb-2" *ngIf="!hasCandidate">
+          <h6>Se debe crear primero el candidato</h6>
+        </span>
+      </legend>
+      <span *ngIf="submitted && createWitness.invalid" class="badge bg-danger">Todos los campos son
+        obligatorios
+      </span>
+
+      <div class="col-md-4">
+
+        <!-- Columna 1 del formulario -->
+        <form class="" [formGroup]="createWitness" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="documento"
+              placeholder="Documento">
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
+              placeholder="Nombre">
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
+              placeholder="Apellido">
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
+              placeholder="Direccion">
+          </fieldset>
+        </form>
+        <!-- Fin Columna 1 del formulario -->
+
       </div>
-    </h1>
-    <div class="card-body">
 
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-3">
+      <div class="col-md-4">
+        <!-- Columna 2 del formulario -->
+        <form [formGroup]="createWitness" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="telefono"
+              placeholder="Telefono">
+            <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
+              placeholder="FechaNacimiento">
+            <select class="form-select border-0 border-bottom mt-3" formControlName="genero">
+              <option selected disabled>Selecciona el genero</option>
+              <option value="Mujer">Mujer</option>
+              <option value="Hombre">Hombre</option>
+            </select>
+            <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="mesa"
+              placeholder="N° Mesa">
 
-            <!-- Formulario -->
-            <form [formGroup]="createWitness" (ngSubmit)="addEdit()">
-              <fieldset>
-                <legend>{{titulo}}<span class="badge bg-warning mt-2 mb-2" *ngIf="!hasCandidate">
-                    <h6>Se debe crear primero el candidato</h6>
-                  </span></legend>
-                <span *ngIf="submitted && createWitness.invalid" class="badge bg-danger">Todos los campos son
-                  obligatorios</span>
-                <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="documento"
-                  placeholder="Documento">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
-                  placeholder="Nombre">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
-                  placeholder="Apellido">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
-                  placeholder="Direccion">
-                <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
-                  placeholder="Telefono">
-                <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
-                  placeholder="FechaNacimiento">
-                <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="mesa"
-                  placeholder="N° Mesa">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="puesto"
-                  placeholder="Puesto">
-                <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
-                  placeholder="Email">
-                <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
-                  placeholder="Contraseña">
-                <button type="submit" class="btn btn-dark mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
-                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator"
-                  [routerLink]="['/elecciones/testigos']" *ngIf="backButtonVisible">Volver</button>
-              </fieldset>
-            </form>
-            <!-- Fin Formulario -->
+          </fieldset>
+        </form>
+        <!-- Fin Columna 2 del formulario -->
+      </div>
 
-          </div>
-          <div class="col-md-9">
-            <div class="table-responsive">
-
-              <!-- Tabla -->
-              <h4 *ngIf="witnesses.length == 0">No hay datos para mostrar</h4>
-              <table class="table table-striped" *ngIf="witnesses.length > 0">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
-                    <th scope="col">Direccion</th>
-                    <th scope="col">Telefono</th>
-                    <th scope="col">F. Nacimiento</th>
-                    <th scope="col">N° Mesa</th>
-                    <th scope="col">Puesto</th>
-                    <th scope="col">Email</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let witness of witnesses">
-                    <th scope="row">{{witness.documento}}</th>
-                    <td>{{witness.nombre}}</td>
-                    <td>{{witness.apellido}}</td>
-                    <td>{{witness.direccion}}</td>
-                    <td>{{witness.telefono}}</td>
-                    <td>{{witness.fechaNacimiento}}</td>
-                    <td>{{witness.mesa}}</td>
-                    <td>{{witness.puesto}}</td>
-                    <td>{{witness.email}}</td>
-                    <td>
-                      <a class="btn btn-sm btn-primary me-2" [routerLink]="['/editar-testigos/', witness.id]"><i
-                          class="bi bi-pencil-square"></i></a>
-                      <a (click)="deleteWitness(witness)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- Fin Tabla -->
-
+      <div class="col-md-4">
+        <!-- Columna 3 del formulario -->
+        <form [formGroup]="createWitness" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <input type="text" class="form-control border-0 border-bottom mt-5" formControlName="puesto"
+              placeholder="Puesto">
+            <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
+              placeholder="Email">
+            <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
+              placeholder="Contraseña">
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-dark  mt-3 mx-2" *ngIf="hasCandidate">{{boton}}</button>
+              <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()"
+                *ngIf="backButtonVisible">Volver</button>
             </div>
-          </div>
+          </fieldset>
+        </form>
+        <!-- Fin Columna 3 del formulario -->
+      </div>
+
+
+      <div class="col-md-12 mt-5">
+        <legend class="mb-5 mt-5">
+          Listado de Testigos
+        </legend>
+        <div class="table-responsive">
+
+          <!-- Tabla -->
+          <h4 *ngIf="witnesses.length == 0">No hay datos para mostrar</h4>
+          <table class="table table-striped" *ngIf="witnesses.length > 0">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Fecha de Nacimiento</th>
+                <th scope="col">Genero</th>
+                <th scope="col">N° Mesa</th>
+                <th scope="col">Puesto</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let witness of witnesses">
+                <th scope="row">{{witness.documento}}</th>
+                <td>{{witness.nombre}}</td>
+                <td>{{witness.apellido}}</td>
+                <td>{{witness.direccion}}</td>
+                <td>{{witness.telefono}}</td>
+                <td>{{witness.fechaNacimiento}}</td>
+                <td>{{witness.genero}}</td>
+                <td>{{witness.mesa}}</td>
+                <td>{{witness.puesto}}</td>
+                <td>{{witness.email}}</td>
+                <td>
+                  <a class="btn btn-sm btn-primary me-2" [routerLink]="['/editar-testigos/', witness.id]"><i
+                      class="bi bi-pencil-square"></i></a>
+                  <a (click)="deleteWitness(witness)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Fin Tabla -->
+
         </div>
       </div>
     </div>

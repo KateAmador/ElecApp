@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Witness } from 'src/app/interfaces/witnesses.interface';
 import { UsersService } from '@services/users.service';
 import { LoginService } from '@services/login.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-witnesses',
@@ -31,7 +32,8 @@ export class WitnessesComponent {
     private loginService: LoginService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private location: Location) {
 
 
     this.createWitness = this.fb.group({
@@ -43,6 +45,7 @@ export class WitnessesComponent {
       mesa: ['', Validators.required],
       puesto: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
+      genero: ['', Validators.required],
       email: ['', Validators.required],
       contraseña: ['', Validators.required]
     })
@@ -138,7 +141,7 @@ export class WitnessesComponent {
         if (Array.isArray(data) && data.length > 0) {
           const firstItem = data[0];
           console.log(firstItem.nombre);
-          if ('puesto' in firstItem) { // Check if the 'puesto' property exists in firstItem
+          if ('puesto' in firstItem) {
             this.createWitness.setValue({
               documento: firstItem.documento,
               nombre: firstItem.nombre,
@@ -178,6 +181,10 @@ export class WitnessesComponent {
     if (this.aRoute.snapshot.paramMap.has('id')) {
       this.backButtonVisible = true;
     }
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   getValues(): Witness {

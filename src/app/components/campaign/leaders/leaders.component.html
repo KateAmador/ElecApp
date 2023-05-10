@@ -1,91 +1,120 @@
-<div class="container mt-4">
-  <div class="card">
-    <h1 class="card-header">Lideres
-      <div *ngIf="loading" class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
+<div class="card-body">
+  <div class="container mt-5">
+    <div class="row">
+
+      <h1 class="title">LIDERES
+        <div *ngIf="loading" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </h1>
+
+      <legend>{{titulo}}
+        <span class="badge bg-warning mt-2 mb-2" *ngIf="!hasCandidate">
+          <h6>Se debe crear primero el candidato</h6>
+        </span>
+      </legend>
+      <span *ngIf="submitted && createLeader.invalid" class="badge bg-danger">Todos los campos son
+        obligatorios
+      </span>
+
+      <div class="col-md-4">
+
+        <!-- Columna 1 del formulario -->
+        <form [formGroup]="createLeader" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="documento"
+              placeholder="Documento">
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
+              placeholder="Nombre">
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
+              placeholder="Apellido">
+          </fieldset>
+        </form>
+        <!-- Fin Columna 1 del formulario -->
+
       </div>
-    </h1>
-    <div class="card-body">
 
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-3">
+      <div class="col-md-4">
 
-            <!-- Formulario -->
-            <form [formGroup]="createLeader" (ngSubmit)="addEdit()">
-              <fieldset>
-                <legend>{{titulo}}<span class="badge bg-warning mt-2 mb-2" *ngIf="!hasCandidate">
-                    <h6>Se debe crear primero el candidato</h6>
-                  </span></legend>
-                <span *ngIf="submitted && createLeader.invalid" class="badge bg-danger">Todos los campos son
-                  obligatorios</span>
-                <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="documento"
-                  placeholder="Documento">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
-                  placeholder="Nombre">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
-                  placeholder="Apellido">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
-                  placeholder="Direccion">
-                <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
-                  placeholder="Telefono">
-                <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
-                  placeholder="FechaNacimiento">
-                  <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="genero"
-                  placeholder="Genero">
-                <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
-                  placeholder="Email">
-                <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
-                  placeholder="Contraseña">
-                <button type="submit" class="btn btn-dark  mt-2 float-end" *ngIf="hasCandidate">{{boton}}</button>
-                <button type="submit" class="btn btn-dark  mt-2 float-end btn-separator"
-                  [routerLink]="['/campaña/lideres']" *ngIf="backButtonVisible">Volver</button>
-              </fieldset>
-            </form>
-            <!-- Fin Formulario -->
+        <!-- Columna 2 del formulario -->
+        <form [formGroup]="createLeader" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
+              placeholder="Direccion">
+            <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
+              placeholder="Telefono">
+            <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
+              placeholder="FechaNacimiento">
+          </fieldset>
+        </form>
+        <!-- Fin Columna 2 del formulario -->
+      </div>
 
-          </div>
-          <div class="col-md-9">
-            <div class="table-responsive">
+      <div class="col-md-4">
 
-              <!-- Tabla -->
-              <h4 *ngIf="leaders.length == 0">No hay datos para mostrar</h4>
-              <table class="table table-striped" *ngIf="leaders.length > 0">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
-                    <th scope="col">Direccion</th>
-                    <th scope="col">Telefono</th>
-                    <th scope="col">F. Nacimiento</th>
-                    <th scope="col">Genero</th>
-                    <th scope="col">Email</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let leader of leaders">
-                    <th scope="row">{{leader.documento}}</th>
-                    <td>{{leader.nombre}}</td>
-                    <td>{{leader.apellido}}</td>
-                    <td>{{leader.direccion}}</td>
-                    <td>{{leader.telefono}}</td>
-                    <td>{{leader.fechaNacimiento}}</td>
-                    <td>{{leader.genero}}</td>
-                    <td>{{leader.email}}</td>
-                    <td>
-                      <a class="btn btn-sm btn-primary" [routerLink]="['/editar-lideres/', leader.id]"><i
-                          class="bi bi-pencil-square"></i></a>
-                      <a (click)="deleteLeader(leader)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- Fin Tabla -->
+        <!-- Columna 3 del formulario -->
+        <form [formGroup]="createLeader" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <select class="form-select border-0 border-bottom mt-3" formControlName="genero">
+              <option selected disabled>Selecciona el genero</option>
+              <option value="Mujer">Mujer</option>
+              <option value="Hombre">Hombre</option>
+            </select>
+            <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
+              placeholder="Email">
+            <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
+              placeholder="Contraseña">
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-dark  mt-3 mx-2" *ngIf="hasCandidate">{{boton}}</button>
+                <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="backButtonVisible">Volver</button>
+              </div>
+          </fieldset>
+        </form>
+        <!-- Fin Columna 3 del formulario -->
+      </div>
 
-            </div>
-          </div>
+      <div class="col-md-12 mt-5">
+        <legend class="mb-5 mt-5">
+          Listado de Lideres
+        </legend>
+        <div class="table-responsive">
+
+          <!-- Tabla -->
+          <h4 *ngIf="leaders.length == 0">No hay datos para mostrar</h4>
+          <table class="table table-responsive" *ngIf="leaders.length > 0">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Fecha de Nacimiento</th>
+                <th scope="col">Genero</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let leader of leaders">
+                <th scope="row">{{leader.documento}}</th>
+                <td>{{leader.nombre}}</td>
+                <td>{{leader.apellido}}</td>
+                <td>{{leader.direccion}}</td>
+                <td>{{leader.telefono}}</td>
+                <td>{{leader.fechaNacimiento}}</td>
+                <td>{{leader.genero}}</td>
+                <td>{{leader.email}}</td>
+                <td>
+                  <a class="btn btn-sm btn-primary" [routerLink]="['/editar-lideres/', leader.id]"><i
+                      class="bi bi-pencil-square"></i></a>
+                  <a (click)="deleteLeader(leader)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Fin Tabla -->
+
         </div>
       </div>
     </div>

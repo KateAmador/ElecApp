@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Leader } from 'src/app/interfaces/leader.interface';
 import { UsersService } from '@services/users.service';
 import { LoginService } from '@services/login.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-leaders',
@@ -32,7 +33,8 @@ export class LeadersComponent {
     private loginService: LoginService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private location: Location) {
 
     this.createLeader = this.fb.group({
       documento: ['', Validators.required],
@@ -167,6 +169,10 @@ export class LeadersComponent {
     if (this.aRoute.snapshot.paramMap.has('id')) {
       this.backButtonVisible = true;
     }
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   getValues(): Leader {
