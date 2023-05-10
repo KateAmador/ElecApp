@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -54,7 +55,8 @@ import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.compon
     provideFirestore(() => getFirestore()),
     ReactiveFormsModule,
     ToastrModule.forRoot(),
-    NgxChartsModule
+    NgxChartsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

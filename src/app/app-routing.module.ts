@@ -20,14 +20,11 @@ const routes: Routes = [
     path: 'campaña',
     loadChildren: () => import('./components/campaign/campaing.module').then(m => m.CampaingModule), ...authGuard()
   },
-  //{ path: 'lideres', component: LeadersComponent, ...authGuard() },
   { path: 'editar-lideres/:id', component: LeadersComponent, ...authGuard() },
-  //{ path: 'seguidores', component: SupportersComponent, ...authGuard() },
   {
     path: 'elecciones',
     loadChildren: () => import('./components/elections/elections.module').then(m => m.ElectionsModule), ...authGuard()
   },
-  //{ path: 'testigos', component: WitnessesComponent, ...authGuard() },
   { path: 'editar-testigos/:id', component: WitnessesComponent, ...authGuard() },
   { path: 'inicio-sesion', component: LoginComponent },
   { path: 'recuperar', component: ResetPasswordComponent },

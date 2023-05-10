@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LeadersComponent } from './leaders/leaders.component';
-import { SupportersComponent } from './supporters/supporters.component';
+import { LeadersComponent } from '@components/campaign/leaders/leaders.component';
+import { SupportersComponent } from '@components/campaign/supporters/supporters.component';
 
 const routes: Routes = [
   {
     path: 'lideres',
     component: LeadersComponent
   },
-  // {
-  //   path: 'editar-lideres/:id',
-  //   component: LeadersComponent
-  // },
   {
     path: 'seguidores',
     component: SupportersComponent
