@@ -9,7 +9,15 @@ const routes: Routes = [
     component: LeadersComponent
   },
   {
+    path: 'lideres/editar-lideres/:id',
+    component: LeadersComponent
+  },
+  {
     path: 'seguidores',
+    component: SupportersComponent
+  },
+  {
+    path: 'seguidores/editar-seguidores/:id',
     component: SupportersComponent
   }
 ];
