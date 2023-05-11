@@ -2,19 +2,22 @@
   <div class="container mt-5">
     <div class="row">
 
-      <h1 class="title">LIDERES
+      <h1 class="title">SEGUIDORES
         <div *ngIf="loading" class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </h1>
 
+      <legend>{{titulo}}</legend>
 
-
+      <span *ngIf="submitted && createSupporter.invalid" class="badge bg-danger">Todos los campos son
+        obligatorios
+      </span>
 
       <div class="col-md-4">
 
         <!-- Columna 1 del formulario -->
-        <form [formGroup]="createSupporter" (ngSubmit)="newSupporter()" form>
+        <form [formGroup]="createSupporter" (ngSubmit)="addEdit()" form>
           <fieldset>
             <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="documento"
               placeholder="Documento">
@@ -31,7 +34,7 @@
       <div class="col-md-4">
 
         <!-- Columna 2 del formulario -->
-        <form [formGroup]="createSupporter" (ngSubmit)="newSupporter()" form>
+        <form [formGroup]="createSupporter" (ngSubmit)="addEdit()" form>
           <fieldset>
             <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
               placeholder="Direccion">
@@ -47,7 +50,7 @@
       <div class="col-md-4">
 
         <!-- Columna 3 del formulario -->
-        <form [formGroup]="createSupporter" (ngSubmit)="newSupporter()" form>
+        <form [formGroup]="createSupporter" (ngSubmit)="addEdit()" form>
           <fieldset>
             <select class="form-select border-0 border-bottom mt-3" formControlName="genero">
               <option selected disabled>Selecciona el genero</option>
@@ -57,8 +60,8 @@
             <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
               placeholder="Email">
             <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-dark  mt-3 mx-2">enviar</button>
-              <!-- <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="backButtonVisible">Volver</button> -->
+              <button type="submit" class="btn btn-dark  mt-3 mx-2">{{boton}}</button>
+              <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="backButtonVisible">Volver</button>
             </div>
           </fieldset>
         </form>
@@ -67,7 +70,7 @@
 
       <div class="col-md-12 mt-5">
         <legend class="mb-5 mt-5">
-          Listado de Lideres
+          Listado de Seguidores
         </legend>
         <div class="table-responsive">
 
@@ -98,9 +101,9 @@
                 <td>{{supporter.genero}}</td>
                 <td>{{supporter.email}}</td>
                 <td>
-                  <!-- <a class="btn btn-sm btn-primary" [routerLink]="['/editar-lideres/', supporters.id]"><i
+                  <a class="btn btn-sm btn-primary" [routerLink]="['/campaña/seguidores/editar-seguidores/', supporter.id]"><i
                       class="bi bi-pencil-square"></i></a>
-                  <a (click)="deleteLeader(leader)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a> -->
+                  <a (click)="deleteSupporter(supporter)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                 </td>
               </tr>
             </tbody>

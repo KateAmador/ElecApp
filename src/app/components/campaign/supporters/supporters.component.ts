@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoginService } from '@services/login.service';
 import { SupportersService } from '@services/supporters.service';
-import { Firestore } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { Supporter } from 'src/app/interfaces/supporters.interface';
 import { Auth } from '@angular/fire/auth';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-supporters',
@@ -14,20 +14,24 @@ import { Auth } from '@angular/fire/auth';
 })
 export class SupportersComponent {
 
-  firestore: Firestore = inject(Firestore);
   candidateId: string = 'candidatoID';
-  leaderId: string = 'ocd9AAQDngR04ZHRby4gnaHQ35r2'
   createSupporter: FormGroup;
   supporters: any[] = [];
-  //titulo: string;
+  titulo: string | undefined;
+  id: string | null;
+  boton: string | undefined;
+  backButtonVisible = false;
   loading = false;
+  submitted = false;
 
   constructor(
     private fb: FormBuilder,
     private supporterService: SupportersService,
-    private loginService: LoginService,
     private toastr: ToastrService,
-    private auth: Auth) {
+    private auth: Auth,
+    private router: Router,
+    private aRoute: ActivatedRoute,
+    private location: Location) {
 
     this.createSupporter = this.fb.group({
       documento: ['', Validators.required],
@@ -39,22 +43,41 @@ export class SupportersComponent {
       genero: ['', Validators.required],
       email: ['', Validators.required]
     })
-
+    this.id = this.aRoute.snapshot.paramMap.get('id');
+    this.titulo = this.id ? 'Editar Seguidor' : 'Crear Seguidor';
+    this.boton = this.id ? 'Editar' : 'Agregar';
   }
 
   ngOnInit(): void {
+    this.getSupporters();
+    this.updateSupporter();
+    this.backButton();
+  }
 
+  async addEdit() {
+    this.submitted = true;
+
+    const allFieldsEmpty = Object.values(this.createSupporter.value).every(val => val === '');
+
+    if (this.createSupporter.invalid || allFieldsEmpty) {
+      return;
+    }
+
+    if (this.id === null) {
+      this.newSupporter();
+    } else {
+      this.update(this.id);
+    }
   }
 
   async newSupporter() {
     const supporter = this.getValues();
     const candidateId = 'candidatoID';
-    const leaderId = 'ocd9AAQDngR04ZHRby4gnaHQ35r2';
-    //const userId = this.auth.currentUser?.uid;
-    //console.log('userId:', userId);
+    const leaderId = this.auth.currentUser?.uid;
+
     try {
       this.loading = true
-      const response = await this.supporterService.addUser(candidateId, leaderId, supporter);
+      const response = await this.supporterService.addSupporter(candidateId, leaderId, supporter);
 
       this.toastr.success('Guardado Correctamente', 'Lider');
       this.createSupporter.reset();
@@ -65,6 +88,72 @@ export class SupportersComponent {
       console.error(error);
       this.loading = false;
       this.toastr.error('Ocurrió un error al guardar', 'Error');
+    }
+  }
+
+  getSupporters() {
+    const candidateId = 'candidatoID';
+    const leaderId = this.auth.currentUser?.uid;
+    this.supporterService.getSupporters(candidateId, leaderId).subscribe((supporters) => {
+      this.supporters = supporters;
+      console.log(leaderId);
+    });
+  }
+
+  async deleteSupporter(supporter: Supporter) {
+    const candidateId = 'candidatoID';
+    const leaderId = this.auth.currentUser?.uid;
+    if (confirm('¿Estás seguro que deseas eliminar el seguidor?')) {
+      const response = await this.supporterService.deleteSupporter(candidateId, leaderId, supporter);
+      this.toastr.success('Se ha eliminado correctamente', 'Seguidor');
+      console.log(response);
+    }
+  }
+
+  update(supporterId: string) {
+    const supporter = this.getValues();
+    const candidateId = 'candidatoID';
+    const leaderId = this.auth.currentUser?.uid;
+    this.loading = true;
+
+    this.supporterService.updateSupporter(candidateId, leaderId, supporterId, supporter)
+      .then(() => {
+        this.loading = false;
+        this.createSupporter.reset();
+        this.router.navigate(['/campaña/seguidores']);
+        this.toastr.success('Modificado correctamente', 'Seguidor');
+      })
+      .catch((error) => {
+        console.error('Error actualizando líder: ', error);
+        this.loading = false;
+      });
+  }
+
+
+  updateSupporter() {
+    const candidateId = 'candidatoID';
+    const leaderId = this.auth.currentUser?.uid;
+
+    if (this.id !== null) {
+
+      this.loading = true;
+
+      this.supporterService.getSupporter(this.id, candidateId, leaderId).subscribe(data => {
+        this.loading = false;
+
+        console.log(data.nombre);
+
+        this.createSupporter.setValue({
+          documento: data.documento,
+          nombre: data.nombre,
+          apellido: data.apellido,
+          direccion: data.direccion,
+          telefono: data.telefono,
+          fechaNacimiento: data.fechaNacimiento || '',
+          genero: data.genero,
+          email: data.email
+        });
+      });
     }
   }
 
@@ -81,5 +170,15 @@ export class SupportersComponent {
       rol: 'seguidor'
     };
     return supporter;
+  }
+
+  backButton() {
+    if (this.aRoute.snapshot.paramMap.has('id')) {
+      this.backButtonVisible = true;
+    }
+  }
+
+  goBack() {
+    this.location.back();
   }
 }
