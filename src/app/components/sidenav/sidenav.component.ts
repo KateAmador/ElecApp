@@ -4,13 +4,10 @@ import { Router } from '@angular/router';
 import { fadeInOut, INavbarData } from './helper';
 import { navbarData } from './nav-data';
 import { LoginService } from '@services/login.service';
-import { Auth } from '@angular/fire/auth';
-import 'firebase/firestore';
-import 'firebase/auth';
-import { Firestore } from '@angular/fire/firestore';
-import { UsersService } from '@services/users.service';
-// import { AngularFireAuth } from '@angular/fire/compat/auth';
-// import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { Leader } from 'src/app/interfaces/leader.interface';
+import { Witness } from 'src/app/interfaces/witnesses.interface';
 
 
 interface SideNavToggle {
@@ -39,16 +36,13 @@ interface SideNavToggle {
 export class SidenavComponent implements OnInit {
 
   login: boolean = false;
-  nombreUsuario: string = ' ';
+  //nombreUsuario: string = ' ';
 
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
   navData = navbarData;
   multiple: boolean = false;
-  candidatoService: any;
-  users: any;
-  isLoading: boolean | undefined;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -62,17 +56,14 @@ export class SidenavComponent implements OnInit {
   constructor(
     public router: Router,
     private loginService: LoginService,
-    private auth: Auth,
-    private firestore: Firestore,
-    private userService: UsersService,
-    // private afAuth: AngularFireAuth,
-    // private afs: AngularFirestore
-    ) {
+    private afAuth: AngularFireAuth,
+    private afs: AngularFirestore) {
 
     this.loginService.stateUser().subscribe(res => {
       if (res) {
         console.log('Esta logueado');
         //res.uid
+        console.log(res.email);;
       } else {
         console.log('No esta logueado');
       }
@@ -148,6 +139,17 @@ export class SidenavComponent implements OnInit {
       .catch((error: any) => console.log(error));
   }
 
+  // getUserData(uid: string){
+  //   const pathLeader = 'Candidato/candidatoID/Lideres';
+  //   const pathWitness = 'Candidato/candidatoID/Testigos';
+  //   const id = uid;
 
+  //   const rol = this.loginService.getDoc<Leader>(pathLeader, id).subscribe( res => {
+  //     console.log('datos -> ', res);
 
+  //     if(res){
+  //       res.
+  //     }
+  //   })
+  // }
 }

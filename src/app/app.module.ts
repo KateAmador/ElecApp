@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -58,7 +59,9 @@ import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.compon
     NgxChartsModule,
     RouterModule
   ],
-  providers: [],
+  providers: [
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

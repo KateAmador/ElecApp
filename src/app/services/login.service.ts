@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, authState } from '@angular/fire/auth';
 import 'firebase/auth';
-import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 
 @Injectable({
@@ -10,7 +10,8 @@ import 'firebase/firestore';
 })
 export class LoginService {
 
-  constructor(private auth: Auth) { }
+  constructor(private auth: Auth,
+    private angFire: AngularFirestore) { }
 
   async register(email: any, password: any) {
     const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
@@ -31,5 +32,9 @@ export class LoginService {
 
   stateUser(){
     return authState(this.auth);
+  }
+
+  getDoc<type>(path: string, id: string) {
+    return this.angFire.collection(path).doc<type>(id).valueChanges;
   }
 }
