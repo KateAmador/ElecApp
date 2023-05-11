@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: 'testigos',
     component: WitnessesComponent
+  },
+  {
+    path: 'testigos/editar-testigos/:id',
+    component: WitnessesComponent
   }
 ];
 
