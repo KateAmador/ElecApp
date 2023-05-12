@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -15,13 +15,12 @@ export class AppComponent {
   title = 'sidenav';
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute) {}
+    private router: Router) { }
 
   isSideNavCollapsed = false;
   screenWidth = 0;
 
-  pages(): boolean{
+  pages(): boolean {
     return this.router.url === '/inicio-sesion' || this.router.url === '/recuperar';
   }
 
