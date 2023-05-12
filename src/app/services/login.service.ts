@@ -35,6 +35,6 @@ export class LoginService {
   }
 
   getDoc<type>(path: string, id: string) {
-    return this.angFire.collection(path).doc<type>(id).valueChanges;
+    return this.angFire.collection(path).doc<type>(id).valueChanges();;
   }
 }

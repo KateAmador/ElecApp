@@ -4,10 +4,9 @@ import { Router } from '@angular/router';
 import { fadeInOut, INavbarData } from './helper';
 import { navbarData } from './nav-data';
 import { LoginService } from '@services/login.service';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { Leader } from 'src/app/interfaces/leader.interface';
 import { Witness } from 'src/app/interfaces/witnesses.interface';
+import { Auth } from '@angular/fire/auth';
 
 
 interface SideNavToggle {
@@ -36,7 +35,11 @@ interface SideNavToggle {
 export class SidenavComponent implements OnInit {
 
   login: boolean = false;
-  //nombreUsuario: string = ' ';
+  rol: string = "";
+  userName: string = "";
+  userLastName: string = '';
+  candidateId: string = 'candidatoID';
+
 
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
@@ -56,14 +59,14 @@ export class SidenavComponent implements OnInit {
   constructor(
     public router: Router,
     private loginService: LoginService,
-    private afAuth: AngularFireAuth,
-    private afs: AngularFirestore) {
+    private auth: Auth) {
 
     this.loginService.stateUser().subscribe(res => {
       if (res) {
         console.log('Esta logueado');
-        //res.uid
-        console.log(res.email);;
+        const leaderId = this.auth.currentUser?.uid;
+        this.getUserData(leaderId);
+        this.rol;
       } else {
         console.log('No esta logueado');
       }
@@ -72,34 +75,6 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
-    // this.afAuth.authState.subscribe(user => {
-    //   if (user) {
-    //     const uid = user.uid;
-    //     const candidatoRef: AngularFirestoreDocument<any> = this.afs.collection('candidato').doc(uid);
-    //     candidatoRef.get().subscribe(doc => {
-    //       if (doc.exists) {
-    //         const data = doc.data();
-    //         if (data.testigos) {
-    //           const testigoRef: AngularFirestoreDocument<any> = candidatoRef.collection('testigos').doc(uid);
-    //           testigoRef.get().subscribe(testigoDoc => {
-    //             if (testigoDoc.exists) {
-    //               const testigoData = testigoDoc.data();
-    //               this.nombreUsuario = testigoData.nombre;
-    //             }
-    //           });
-    //         } else if (data.lideres) {
-    //           const liderRef: AngularFirestoreDocument<any> = candidatoRef.collection('lideres').doc(uid);
-    //           liderRef.get().subscribe(liderDoc => {
-    //             if (liderDoc.exists) {
-    //               const liderData = liderDoc.data();
-    //               this.nombreUsuario = liderData.nombre;
-    //             }
-    //           });
-    //         }
-    //       }
-    //     });
-    //   }
-    // });
   }
 
   toggleCollapse(): void {
@@ -139,17 +114,29 @@ export class SidenavComponent implements OnInit {
       .catch((error: any) => console.log(error));
   }
 
-  // getUserData(uid: string){
-  //   const pathLeader = 'Candidato/candidatoID/Lideres';
-  //   const pathWitness = 'Candidato/candidatoID/Testigos';
-  //   const id = uid;
+  getUserData(uid: any) {
+    const pathLeader = 'Candidato/candidatoID/Lideres';
+    const pathWitness = 'Candidato/candidatoID/Testigos';
+    const id = uid;
 
-  //   const rol = this.loginService.getDoc<Leader>(pathLeader, id).subscribe( res => {
-  //     console.log('datos -> ', res);
+    this.loginService.getDoc<Leader>(pathLeader, id).subscribe(res => {
+      //console.log('datos de Lideres -> ', res);
 
-  //     if(res){
-  //       res.
-  //     }
-  //   })
-  // }
+      if (res) {
+        this.rol = res.rol;
+        this.userName = res.nombre;
+        this.userLastName = res.apellido;
+      } else {
+
+        this.loginService.getDoc<Witness>(pathWitness, id).subscribe(res2 => {
+          //console.log('datos de Testigos -> ', res2);
+          if (res2) {
+            this.rol = res2.rol;
+            this.userName = res2.nombre;
+            this.userLastName = res2.apellido;
+          }
+        });
+      }
+    });
+  }
 }

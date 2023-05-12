@@ -8,13 +8,14 @@
   </div>
   <div class="scrollwrap scrollwrap_delayed">
     <ul class="sidenav-nav">
-      <li class="sidenav-nav-item" *ngFor="let data of navData">
+      <li class="sidenav-nav-item" *ngFor="let data of navData" >
         <a class="sidenav-nav-link" (click)="handleClick(data)" *ngIf="data.items && data.items.length > 0"
           [ngClass]="getActiveClass(data)">
           <i class="sidenav-link-icon" [class]="data.icon"></i>
           <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
             {{data.label}}
           </span>
+
           <i *ngIf="data.items && collapsed" class="menu-collapse-icon"
             [ngClass]="!data.expanded ? 'bi bi-chevron-right' : 'bi bi-chevron-down'"></i>
         </a>
@@ -42,11 +43,11 @@
           </span>
         </a>
       </li>
-      <li class="sidenav-nav-item user" >
+      <li class="sidenav-nav-item user">
         <a class="sidenav-nav-link user" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
           <i class="sidenav-link-icon bi bi-person-circle"></i>
           <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
-            USER
+            {{userName}} {{userLastName}}
           </span>
         </a>
       </li>
