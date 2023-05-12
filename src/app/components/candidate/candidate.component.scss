@@ -1,14 +1,14 @@
 body {
-  background-color: #f9f9fa
+  background-color: #f9f9fa;
 }
 
-.title{
+.title {
   text-align: center;
   margin-bottom: 5rem;
 }
 
 .padding {
-  padding: 3rem !important
+  padding: 3rem !important;
 }
 
 .user-card-full {
@@ -17,8 +17,8 @@ body {
 
 .card {
   border-radius: 5px;
-  -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
-  box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+  -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+  box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
   border: none;
   margin-bottom: 30px;
 }
@@ -36,8 +36,14 @@ body {
 }
 
 .bg-c-lite-green {
-      background: -webkit-gradient(linear, left top, right top, from(#85784D), to(#383323));
-  background: linear-gradient(to right, #856F67, #382D29);
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(#85784d),
+    to(#383323)
+  );
+  background: linear-gradient(to right, #856f67, #382d29);
 }
 
 .user-profile {
@@ -48,6 +54,24 @@ body {
   padding: 1.25rem;
 }
 
+.card-block a{
+  color: #FFF;
+  text-decoration: none;
+}
+
+.card-block a:hover{
+  color: #d8d3c1;
+}
+
+.social-link a{
+  color: #3A2F2A;
+  text-decoration: none;
+}
+
+.social-link a:hover{
+  color: #826D65;;
+}
+
 .m-b-25 {
   margin-bottom: 25px;
 }
@@ -55,8 +79,6 @@ body {
 .img-radius {
   border-radius: 5px;
 }
-
-
 
 h6 {
   font-size: 14px;
@@ -66,10 +88,10 @@ h6 {
   line-height: 25px;
 }
 
-@media only screen and (min-width: 1400px){
-p {
-  font-size: 14px;
-}
+@media only screen and (min-width: 1400px) {
+  p {
+    font-size: 14px;
+  }
 }
 
 .card-block {

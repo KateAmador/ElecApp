@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CreateCandidateService } from '@services/create-candidate.service';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import Candidate from 'src/app/interfaces/candidate.interface';
 
 @Component({
   selector: 'app-create.candidate',
@@ -17,7 +18,6 @@ export class CreateCandidateComponent {
   loading = false;
   disable = false;
   id: string | null;
-  titulo: string;
 
   constructor(
     private fb: FormBuilder,
@@ -31,10 +31,10 @@ export class CreateCandidateComponent {
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       partido: ['', Validators.required],
-      numero: ['', Validators.required,]
+      numero: ['', Validators.required],
+      email: ['', Validators.required]
     })
     this.id = this.aRoute.snapshot.paramMap.get('id');
-    this.titulo = this.id ? 'Editar Candidato' : 'Crear Candidato';
   }
 
   ngOnInit(): void {
@@ -59,18 +59,8 @@ export class CreateCandidateComponent {
   }
 
   async newCandidate() {
-
+    const candidate = this.getValues();
     this.disable = true;
-
-    const candidate: any = {
-      documento: this.createCandidate.value.documento,
-      nombre: this.createCandidate.value.nombre,
-      apellido: this.createCandidate.value.apellido,
-      partido: this.createCandidate.value.partido,
-      numero: this.createCandidate.value.numero,
-      email: this.createCandidate.value.email,
-      rol: 'candidato'
-    };
 
     try {
       this.loading = true;
@@ -91,18 +81,11 @@ export class CreateCandidateComponent {
 
   update(id: string) {
 
-    this.disable = true;
-    const candidate: any = {
-      documento: this.createCandidate.value.documento,
-      nombre: this.createCandidate.value.nombre,
-      apellido: this.createCandidate.value.apellido,
-      partido: this.createCandidate.value.partido,
-      numero: this.createCandidate.value.numero,
-    }
+    const candidate = this.getValues();
     this.loading = true;
     this.createCandidateService.updateCandidate(id, candidate).then(() => {
       this.loading = false;
-      this.toastr.success('Mdificado correctamente', 'Candidato');
+      this.toastr.success('Modificado correctamente', 'Candidato');
       this.createCandidate.reset();
     });
     this.router.navigate(['/candidato']);
@@ -121,8 +104,21 @@ export class CreateCandidateComponent {
           apellido: data.apellido,
           partido: data.partido,
           numero: data.numero,
+          email: data.email
         })
       })
     }
+  }
+
+  getValues(): Candidate {
+    const candidate: Candidate = {
+      documento: this.createCandidate.value.documento,
+      nombre: this.createCandidate.value.nombre,
+      apellido: this.createCandidate.value.apellido,
+      email: this.createCandidate.value.email,
+      partido: this.createCandidate.value.partido,
+      numero: this.createCandidate.value.numero
+    };
+    return candidate;
   }
 }

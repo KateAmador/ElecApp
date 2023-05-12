@@ -4,4 +4,5 @@ export default interface Candidate {
   apellido: string;
   partido: string;
   numero: string;
+  email: string;
 }

@@ -1,43 +1,84 @@
-<div class="container mt-4">
-  <div class="card">
-    <h1 class="card-header">{{titulo}}
-      <div *ngIf="loading" class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </h1>
-    <div class="card-body">
+<h1 class="title">CANDIDATO
+  <div *ngIf="loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</h1>
 
-      <!-- Formulario -->
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-4">
-            <form [formGroup]="createCandidate" (ngSubmit)="addEdit()">
-              <fieldset>
-                <span *ngIf="submitted && createCandidate.invalid" class="badge bg-danger">Todos los campos son
-                  obligatorios</span>
-                <input type="number" class="form-control border-0 border-bottom mt-5" formControlName="documento"
-                  placeholder="Documento">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
-                  placeholder="Nombre">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
-                  placeholder="Apellido">
-                <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="partido"
-                  placeholder="Partido">
-                <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="numero"
-                  placeholder="Numero">
-                <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
-                  placeholder="Email">
-                <button type="submit" class="btn btn-dark mt-3" [disabled]="disable">Agregar</button>
-                <button type="button" class="btn btn-dark mt-3 btn-separator"
-                  [routerLink]="['/candidato']">Volver</button>
-              </fieldset>
-            </form>
+
+<div class="page-content page-container" id="page-content">
+  <div class="padding">
+    <div class="row container d-flex justify-content-center">
+      <div class="col-xl-6 col-md-12">
+        <form [formGroup]="createCandidate" (ngSubmit)="addEdit()">
+          <div class="card user-card-full">
+            <div class="row m-l-0 m-r-0">
+              <div class="col-sm-4 bg-c-lite-green user-profile">
+                <div class="card-block text-center text-white">
+                  <div class="m-b-25">
+                    <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius"
+                      alt="User-Profile-Image">
+                  </div>
+                  <h6 class="f-w-600">Editar</h6>
+                  <p>Candidato</p>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <div class="card-block">
+                  <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Información<span
+                      *ngIf="submitted && createCandidate.invalid" class="badge bg-danger float-end">Todos los campos
+                      son
+                      obligatorios</span></h6>
+                  <div class="row">
+                    <div class="col-sm-6 mt-3">
+                      <p class="m-b-10 f-w-600">Cedula</p>
+                      <input type="number" class="form-control border-0 border-bottom text-muted f-w-400"
+                        formControlName="documento">
+                    </div>
+                    <div class="col-sm-6 mt-3">
+                      <p class="m-b-10 f-w-600">Nombre</p>
+                      <input type="text" class="form-control border-0 border-bottom text-muted f-w-400"
+                        formControlName="nombre">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 mt-3">
+                      <p class="m-b-10 f-w-600">Apellido</p>
+                      <input type="text" class="form-control border-0 border-bottom text-muted f-w-400"
+                        formControlName="apellido">
+                    </div>
+                    <div class="col-sm-6 mt-3">
+                      <p class="m-b-10 f-w-600">Email</p>
+                      <input type="email" class="form-control border-0 border-bottom text-muted f-w-400"
+                        formControlName="email">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 mt-3">
+                      <p class="m-b-10 f-w-600">Partido</p>
+                      <input type="text" class="form-control border-0 border-bottom text-muted f-w-400"
+                        formControlName="partido">
+                    </div>
+                    <div class="col-sm-6 mt-3">
+                      <p class="m-b-10 f-w-600">Número</p>
+                      <input type="number" class="form-control border-0 border-bottom text-muted f-w-400"
+                        formControlName="numero">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                      <button type="submit" class="btn btn-dark mt-3" [disabled]="disable">Editar</button>
+                      <button type="button" class="btn btn-dark mt-3 float-end"
+                        [routerLink]="['/candidato']">Volver</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
-
-      <!-- Fin Formulario -->
-
     </div>
   </div>
 </div>
