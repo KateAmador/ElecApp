@@ -178,8 +178,8 @@ export class LeadersComponent {
   getValues(): Leader {
     const leader: Leader = {
       documento: this.createLeader.value.documento,
-      nombre: this.createLeader.value.nombre,
-      apellido: this.createLeader.value.apellido,
+      nombre: this.capitalizeFirstLetter(this.createLeader.value.nombre),
+      apellido: this.capitalizeFirstLetter(this.createLeader.value.apellido),
       direccion: this.createLeader.value.direccion,
       telefono: this.createLeader.value.telefono,
       fechaNacimiento: this.createLeader.value.fechaNacimiento,
@@ -189,5 +189,9 @@ export class LeadersComponent {
       rol: 'lider'
     };
     return leader;
+  }
+
+  capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
 }

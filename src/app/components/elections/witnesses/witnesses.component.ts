@@ -190,12 +190,12 @@ export class WitnessesComponent {
   getValues(): Witness {
     const witness: Witness = {
       documento: this.createWitness.value.documento,
-      nombre: this.createWitness.value.nombre,
-      apellido: this.createWitness.value.apellido,
+      nombre: this.capitalizeFirstLetter(this.createWitness.value.nombre),
+      apellido: this.capitalizeFirstLetter(this.createWitness.value.apellido),
       direccion: this.createWitness.value.direccion,
       telefono: this.createWitness.value.telefono,
       mesa: this.createWitness.value.mesa,
-      puesto: this.createWitness.value.puesto,
+      puesto: this.capitalizeFirstLetter(this.createWitness.value.puesto),
       fechaNacimiento: this.createWitness.value.fechaNacimiento,
       genero: this.createWitness.value.genero,
       email: this.createWitness.value.email,
@@ -203,5 +203,9 @@ export class WitnessesComponent {
       rol: 'testigo'
     };
     return witness;
+  }
+
+  capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
 }

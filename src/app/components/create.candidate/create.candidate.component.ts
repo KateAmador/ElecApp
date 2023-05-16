@@ -113,12 +113,16 @@ export class CreateCandidateComponent {
   getValues(): Candidate {
     const candidate: Candidate = {
       documento: this.createCandidate.value.documento,
-      nombre: this.createCandidate.value.nombre,
-      apellido: this.createCandidate.value.apellido,
+      nombre: this.capitalizeFirstLetter(this.createCandidate.value.nombre),
+      apellido: this.capitalizeFirstLetter(this.createCandidate.value.apellido),
       email: this.createCandidate.value.email,
       partido: this.createCandidate.value.partido,
       numero: this.createCandidate.value.numero
     };
     return candidate;
+  }
+
+  capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
 }

@@ -160,8 +160,8 @@ export class SupportersComponent {
   getValues(): Supporter {
     const supporter: Supporter = {
       documento: this.createSupporter.value.documento,
-      nombre: this.createSupporter.value.nombre,
-      apellido: this.createSupporter.value.apellido,
+      nombre: this.capitalizeFirstLetter(this.createSupporter.value.nombre),
+      apellido: this.capitalizeFirstLetter(this.createSupporter.value.apellido),
       direccion: this.createSupporter.value.direccion,
       telefono: this.createSupporter.value.telefono,
       fechaNacimiento: this.createSupporter.value.fechaNacimiento,
@@ -170,6 +170,10 @@ export class SupportersComponent {
       rol: 'seguidor'
     };
     return supporter;
+  }
+
+  capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
   backButton() {
