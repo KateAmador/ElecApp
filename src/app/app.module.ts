@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { FormsModule } from '@angular/forms';
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -57,7 +58,8 @@ import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.compon
     ReactiveFormsModule,
     ToastrModule.forRoot(),
     NgxChartsModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ],
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
