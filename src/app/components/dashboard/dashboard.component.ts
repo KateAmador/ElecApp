@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SearchService } from '@services/search.service';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
@@ -9,6 +10,10 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
 export class DashboardComponent implements OnInit {
 
   view: [number, number] = [500, 200];
+  genre: string = '';
+  result: number | null = null;
+  totalHombres: number = 0;
+  totalMujeres: number = 0;
 
   // options
   gradient: boolean = true;
@@ -26,11 +31,11 @@ export class DashboardComponent implements OnInit {
   single = [
     {
       "name": "Mujeres",
-      "value": 1940000
+      "value": 0
     },
     {
       "name": "Hombres",
-      "value": 1200000
+      "value": 0
     }
   ];
 
@@ -57,11 +62,11 @@ export class DashboardComponent implements OnInit {
   cardColor: string = '#232837';
   cardTextColor: string = '#212529'
 
-  constructor() {
+  constructor(private searchService: SearchService) {
     //Object.assign(this, { single });
   }
-  ngOnInit(): void {
-    //throw new Error('Method not implemented.');
+  async ngOnInit() {
+    this.showGender();
   }
 
   onSelect(data: any): void {
@@ -80,4 +85,48 @@ export class DashboardComponent implements OnInit {
     console.log(event);
   }
 
+  async getGender(): Promise<void> {
+    try {
+      const totalHombres = await this.searchService.searchForGender('Hombre');
+      const totalMujeres = await this.searchService.searchForGender('Mujer');
+
+      this.single = [
+        {
+          "name": "Mujeres",
+          "value": totalMujeres
+        },
+        {
+          "name": "Hombres",
+          "value": totalHombres
+        }
+      ];
+
+      this.totalHombres = totalHombres;
+      this.totalMujeres = totalMujeres;
+    } catch (error) {
+      console.error('Error al buscar:', error);
+    }
+  }
+
+  async showGender(): Promise<void> {
+    try {
+      await this.getGender();
+      console.log('Total de hombres:', this.totalHombres);
+      console.log('Total de mujeres:', this.totalMujeres);
+    } catch (error) {
+      console.error('Error al buscar:', error);
+    }
+  }
+
+  //Busqueda por genero
+
+  // searchGender(): void {
+  //   this.searchService.searchForGender(this.genre)
+  //     .then((total) => {
+  //       this.result = total;
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error al buscar:', error);
+  //     });
+  // }
 }
