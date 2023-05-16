@@ -39,6 +39,7 @@ export class SidenavComponent implements OnInit {
   userName: string = "";
   userLastName: string = '';
   candidateId: string = 'candidatoID';
+  isExpanded: boolean = false;
 
 
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
@@ -80,11 +81,13 @@ export class SidenavComponent implements OnInit {
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
     this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+    this.isExpanded = true;
   }
 
   closeSidenav(): void {
     this.collapsed = false;
     this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+    this.isExpanded = false;
   }
 
   handleClick(item: INavbarData): void {
@@ -120,7 +123,6 @@ export class SidenavComponent implements OnInit {
     const id = uid;
 
     this.loginService.getDoc<Leader>(pathLeader, id).subscribe(res => {
-      //console.log('datos de Lideres -> ', res);
 
       if (res) {
         this.rol = res.rol;
@@ -129,7 +131,7 @@ export class SidenavComponent implements OnInit {
       } else {
 
         this.loginService.getDoc<Witness>(pathWitness, id).subscribe(res2 => {
-          //console.log('datos de Testigos -> ', res2);
+
           if (res2) {
             this.rol = res2.rol;
             this.userName = res2.nombre;
