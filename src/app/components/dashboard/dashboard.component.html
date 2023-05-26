@@ -1,41 +1,17 @@
-<div class="container mt-4">
-  <h1 class="title">DASHBOARD</h1>
+<h1 class="title">DASHBOARD</h1>
   <div class="row">
-    <div class="col-md-12 col-lg-5">
-      <div class="card m-4 overflow-hidden">
-        <div class="card-body">
-          <div class="chart-container" id="chart1">
-            <ngx-charts-advanced-pie-chart [view]="view" [scheme]="colorScheme" [results]="single" [gradient]="gradient"
-              (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
-            </ngx-charts-advanced-pie-chart>
-          </div>
-        </div>
+    <div class="col-md-5">
+      <div class="chart-container">
+        <legend class="title-legend">Genero Usuarios</legend>
+        <ngx-charts-advanced-pie-chart id="rangeChart" [scheme]="colorScheme" [results]="single" [gradient]="gradient"
+          (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+        </ngx-charts-advanced-pie-chart>
       </div>
     </div>
-    <div class="col-md-12 col-lg-7">
-      <div class="card m-4 overflow-hidden">
-        <div class="card-body">
-          <div class="chart-container" id="chart2">
-            <ngx-charts-number-card [view]="viewCard" [scheme]="colorSchemeCard" [results]="singleCard"
-              [cardColor]="cardColor" (select)="onSelectCard($event)" style="color: #212529;">
-            </ngx-charts-number-card>
-          </div>
-        </div>
+    <div class="col-md-7">
+      <div class="chart-container">
+        <legend class="title-legend">Rango de Edades</legend>
+        <canvas id="ageChart"></canvas>
       </div>
     </div>
   </div>
-</div>
-<!-- Select para buscar por genero -->
-<!-- <form (ngSubmit)="searchGender()">
-  <label>
-    Género:
-    <select [(ngModel)]="genre" name="genero">
-      <option value="Hombre">Hombre</option>
-      <option value="Mujer">Mujer</option>
-    </select>
-  </label>
-  <button type="submit">Buscar</button>
-</form>
-<div *ngIf="result !== null">
-  Total de {{ genre }}: {{ result }}
-</div> -->

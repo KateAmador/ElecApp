@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { DocumentData, DocumentSnapshot, QuerySnapshot } from '@angular/fire/compat/firestore';
 import { SearchService } from '@services/search.service';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
+import { Chart } from 'chart.js/auto';
+import { Observable, forkJoin, mergeMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,16 +12,21 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
 })
 export class DashboardComponent implements OnInit {
 
-  view: [number, number] = [500, 200];
   genre: string = '';
   result: number | null = null;
-  totalHombres: number = 0;
-  totalMujeres: number = 0;
+  totalMan: number = 0;
+  totalWomen: number = 0;
+  ageRanges: any[] = [];
+  updateAgeRangesCompleted = false;
 
-  // options
+  //----------Grafica genero----------//
+
+  single: any[] = [];
+
+  //options
   gradient: boolean = true;
   showLegend: boolean = true;
-  showLabels: boolean = true;
+  showLabels: boolean = false;
   isDoughnut: boolean = false;
 
   colorScheme: Color = {
@@ -28,45 +36,15 @@ export class DashboardComponent implements OnInit {
     domain: ['#D4AF5D', '#1A5BD5', '#C7B42C', '#AAAAAA']
   };
 
-  single = [
-    {
-      "name": "Mujeres",
-      "value": 0
-    },
-    {
-      "name": "Hombres",
-      "value": 0
-    }
-  ];
-
-  viewCard: [number, number] = [500, 200];
-
-  colorSchemeCard: Color = {
-    name: 'myColorScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
-  };
-
-  singleCard = [
-    {
-      "name": "Total Votos",
-      "value": 1500000
-    },
-    {
-      "name": "Total Votos candidato",
-      "value": 400000
-    },
-  ];
-
-  cardColor: string = '#232837';
-  cardTextColor: string = '#212529'
 
   constructor(private searchService: SearchService) {
-    //Object.assign(this, { single });
+    Object.assign(this, {});
   }
+
   async ngOnInit() {
-    this.showGender();
+    this.getGender();
+    await this.getUsersAges();
+    //this.createAgeChart();
   }
 
   onSelect(data: any): void {
@@ -87,46 +65,146 @@ export class DashboardComponent implements OnInit {
 
   async getGender(): Promise<void> {
     try {
-      const totalHombres = await this.searchService.searchForGender('Hombre');
-      const totalMujeres = await this.searchService.searchForGender('Mujer');
+      const totalMenSupporters = await this.searchService.searchForGender('Hombre');
+      const totalWomenSuporters = await this.searchService.searchForGender('Mujer');
+      const totalMenLeaders = await this.searchService.searchForLeaderGender('Hombre');
+      const totalWomenLeaders = await this.searchService.searchForLeaderGender('Mujer');
 
       this.single = [
         {
           "name": "Mujeres",
-          "value": totalMujeres
+          "value": totalWomenSuporters + totalWomenLeaders
         },
         {
           "name": "Hombres",
-          "value": totalHombres
+          "value": totalMenSupporters + totalMenLeaders
         }
       ];
 
-      this.totalHombres = totalHombres;
-      this.totalMujeres = totalMujeres;
+      this.totalMan = totalMenSupporters + totalMenLeaders;
+      this.totalWomen = totalWomenSuporters + totalWomenLeaders;
     } catch (error) {
       console.error('Error al buscar:', error);
     }
   }
 
-  async showGender(): Promise<void> {
-    try {
-      await this.getGender();
-      console.log('Total de hombres:', this.totalHombres);
-      console.log('Total de mujeres:', this.totalMujeres);
-    } catch (error) {
-      console.error('Error al buscar:', error);
+  async getUsersAges() {
+    return new Promise<void>((resolve) => {
+      this.ageRanges = [
+        { start: 18, end: 25, count: 0 },
+        { start: 26, end: 35, count: 0 },
+        { start: 36, end: 45, count: 0 },
+        { start: 46, end: 55, count: 0 },
+        { start: 56, end: 65, count: 0 },
+        { start: 66, end: 75, count: 0 },
+        { start: 76, end: 100, count: 0 }
+      ];
+
+      this.searchService.getUsersAges().subscribe((candidateSnapshot) => {
+        const promises: Promise<QuerySnapshot<DocumentData>>[] = [];
+
+        candidateSnapshot.forEach((candidateDoc) => {
+          const leadersCollection = candidateDoc.ref.collection('Lideres');
+          promises.push(leadersCollection.get());
+
+          const leaderPromises: Promise<QuerySnapshot<DocumentData>>[] = [];
+          leadersCollection.get().then((leaderSnapshot) => {
+            leaderSnapshot.forEach((leaderDoc) => {
+
+              const followersCollection = leaderDoc.ref.collection('Seguidores');
+              leaderPromises.push(followersCollection.get());
+              const birthDate = leaderDoc.data()['fechaNacimiento'];
+              const age = this.calculateAge(birthDate);
+              this.updateAgeRangeCount(age);
+            });
+            return Promise.all(leaderPromises);
+
+          }).then((followerSnapshots) => {
+            followerSnapshots.forEach((followerSnapshot) => {
+              followerSnapshot.forEach((followerDoc) => {
+                const birthDate = followerDoc.data()['fechaNacimiento'];
+                const age = this.calculateAge(birthDate);
+                this.updateAgeRangeCount(age);
+              });
+            });
+
+            this.createAgeChart();
+            resolve();
+          });
+        });
+
+        Promise.all(promises).then(() => {
+          this.createAgeChart();
+          resolve();
+        });
+      });
+    });
+  }
+
+
+
+  calculateAge(dateString: string) {
+    const today = new Date();
+    const birthDate = new Date(dateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  }
+
+  updateAgeRangeCount(age: number) {
+    for (const range of this.ageRanges) {
+      if (age >= range.start && age <= range.end) {
+        range.count++;
+        break;
+      }
     }
   }
 
-  //Busqueda por genero
+  createAgeChart() {
+    const ageLabels = this.ageRanges.map(range => `${range.start}-${range.end}`);
+    const ageCounts = this.ageRanges.map(range => range.count);
 
-  // searchGender(): void {
-  //   this.searchService.searchForGender(this.genre)
-  //     .then((total) => {
-  //       this.result = total;
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error al buscar:', error);
-  //     });
-  // }
+    const ctx = document.getElementById('ageChart') as HTMLCanvasElement;
+    const existingChart = Chart.getChart(ctx);
+
+    if (existingChart) {
+      existingChart.destroy();
+    }
+
+    const ageChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ageLabels,
+        datasets: [{
+          label: 'Edades',
+          data: ageCounts,
+          backgroundColor: 'rgba(0, 123, 255, 0.5)',
+          borderColor: 'rgba(0, 123, 255, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: function(value) {
+                if (Number.isInteger(value)) {
+                  return value.toString();
+                }
+                return '';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+
 }
