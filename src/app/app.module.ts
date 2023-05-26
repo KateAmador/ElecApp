@@ -7,6 +7,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { FormsModule } from '@angular/forms';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -25,7 +26,6 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { CreateCandidateComponent } from './components/create.candidate/create.candidate.component';
 import { LoginComponent } from './components/login/login.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CampaignComponent } from './components/campaign/campaign.component';
 import { ElectionsComponent } from './components/elections/elections.component';
 import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.component';
