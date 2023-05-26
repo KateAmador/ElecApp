@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { SupportersService } from '@services/supporters.service';
 import { ToastrService } from 'ngx-toastr';
 import { Supporter } from 'src/app/interfaces/supporters.interface';
@@ -20,9 +20,10 @@ export class SupportersComponent {
   titulo: string | undefined;
   id: string | null;
   boton: string | undefined;
-  backButtonVisible = false;
+  hasId = false;
   loading = false;
   submitted = false;
+  maxDate: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +40,7 @@ export class SupportersComponent {
       apellido: ['', Validators.required],
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
+      fechaNacimiento: ['', this.isAdult],
       genero: ['', Validators.required],
       email: ['', Validators.required]
     })
@@ -51,7 +52,8 @@ export class SupportersComponent {
   ngOnInit(): void {
     this.getSupporters();
     this.updateSupporter();
-    this.backButton();
+    this.unableField();
+    this.disableCalendar();
   }
 
   async addEdit() {
@@ -162,7 +164,7 @@ export class SupportersComponent {
       documento: this.createSupporter.value.documento,
       nombre: this.capitalizeFirstLetter(this.createSupporter.value.nombre),
       apellido: this.capitalizeFirstLetter(this.createSupporter.value.apellido),
-      direccion: this.createSupporter.value.direccion,
+      direccion: this.capitalizeFirstLetter(this.createSupporter.value.direccion),
       telefono: this.createSupporter.value.telefono,
       fechaNacimiento: this.createSupporter.value.fechaNacimiento,
       email: this.createSupporter.value.email,
@@ -172,13 +174,34 @@ export class SupportersComponent {
     return supporter;
   }
 
+  isAdult(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      const birthDate = new Date(control.value);
+      const today = new Date();
+      const minimumDate = new Date();
+      minimumDate.setFullYear(today.getFullYear() - 18);
+
+      if (birthDate > minimumDate) {
+        return { menorDeEdad: true };
+      }
+    }
+
+    return null;
+  }
+
+  disableCalendar() {
+    const fechaActual = new Date();
+    fechaActual.setFullYear(fechaActual.getFullYear() - 18);
+    this.maxDate = fechaActual.toISOString().split('T')[0];
+  }
+
   capitalizeFirstLetter(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
-  backButton() {
+  unableField() {
     if (this.aRoute.snapshot.paramMap.has('id')) {
-      this.backButtonVisible = true;
+      this.hasId = true;
     }
   }
 

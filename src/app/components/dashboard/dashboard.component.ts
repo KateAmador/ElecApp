@@ -43,8 +43,7 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
     this.getGender();
-    await this.getUsersAges();
-    //this.createAgeChart();
+    this.getUsersAges();
   }
 
   onSelect(data: any): void {

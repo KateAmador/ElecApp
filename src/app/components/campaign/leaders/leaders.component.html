@@ -23,7 +23,7 @@
         <form [formGroup]="createLeader" (ngSubmit)="addEdit()" form>
           <fieldset>
             <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="documento"
-              placeholder="Documento">
+              placeholder="Documento" [readonly]="hasId">
             <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="nombre"
               placeholder="Nombre">
             <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="apellido"
@@ -44,7 +44,7 @@
             <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="telefono"
               placeholder="Telefono">
             <input type="date" class="form-control border-0 border-bottom mt-3" formControlName="fechaNacimiento"
-              placeholder="FechaNacimiento">
+              placeholder="FechaNacimiento" [max]="maxDate">
           </fieldset>
         </form>
         <!-- Fin Columna 2 del formulario -->
@@ -61,12 +61,12 @@
               <option value="Hombre">Hombre</option>
             </select>
             <input type="email" class="form-control border-0 border-bottom mt-3" formControlName="email"
-              placeholder="Email">
+              placeholder="Email" [readonly]="hasId">
             <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
-              placeholder="Contraseña">
+              placeholder="Contraseña" *ngIf="!hasId">
               <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-dark  mt-3 mx-2" *ngIf="hasCandidate">{{boton}}</button>
-                <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="backButtonVisible">Volver</button>
+                <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="hasId">Volver</button>
               </div>
           </fieldset>
         </form>

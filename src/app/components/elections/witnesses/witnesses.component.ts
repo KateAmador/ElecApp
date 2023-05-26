@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
@@ -24,7 +24,9 @@ export class WitnessesComponent {
   id: string | null;
   titulo: string;
   boton: string;
-  backButtonVisible = false;
+  hasId = false;
+  passwordValidators;
+  maxDate: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +37,10 @@ export class WitnessesComponent {
     private router: Router,
     private location: Location) {
 
+    this.id = this.aRoute.snapshot.paramMap.get('id');
+    this.titulo = this.id ? 'Editar Testigo' : 'Crear Testigo';
+    this.boton = this.id ? 'Editar' : 'Agregar';
+    this.passwordValidators = this.id === null ? [Validators.required] : [];
 
     this.createWitness = this.fb.group({
       documento: ['', Validators.required],
@@ -44,21 +50,19 @@ export class WitnessesComponent {
       telefono: ['', Validators.required],
       mesa: ['', Validators.required],
       puesto: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
+      fechaNacimiento: ['', this.isAdult],
       genero: ['', Validators.required],
       email: ['', Validators.required],
-      contraseña: ['', Validators.required]
+      contraseña: ['', this.passwordValidators]
     })
-    this.id = this.aRoute.snapshot.paramMap.get('id');
-    this.titulo = this.id ? 'Editar Testigo' : 'Crear Testigo';
-    this.boton = this.id ? 'Editar' : 'Agregar';
   }
 
   ngOnInit(): void {
     this.getWitnesses(this.candidateId);
     this.updateWitness();
     this.findCandidate();
-    this.backButton();
+    this.unableField();
+    this.disableCalendar();
   }
 
   async addEdit() {
@@ -84,6 +88,7 @@ export class WitnessesComponent {
       const userCredential = await this.loginService.register(witness.email, witness.contraseña);
       const uid = userCredential.user.uid;
       witness.uid = uid;
+      witness.contraseña = "";
       const response = await this.userService.addUser(this.candidateId, witness);
 
       this.toastr.success('Guardado Correctamente', 'Testigo');
@@ -153,10 +158,10 @@ export class WitnessesComponent {
               mesa: firstItem.mesa,
               puesto: firstItem.puesto,
               email: firstItem.email,
-              contraseña: firstItem.contraseña
+              contraseña: ""
             })
           } else {
-            console.log('El objeto no es un Witness');
+            console.log('El objeto no es un Testigo');
           }
         } else {
           console.log('No se encontró ningún usuario');
@@ -165,34 +170,12 @@ export class WitnessesComponent {
     }
   }
 
-
-  async findCandidate() {
-    try {
-      this.hasCandidate = true;
-      const docRef = doc(this.firestore, 'Candidato', this.candidateId);
-      const docSnap = await getDoc(docRef);
-      this.hasCandidate = docSnap.exists();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  backButton() {
-    if (this.aRoute.snapshot.paramMap.has('id')) {
-      this.backButtonVisible = true;
-    }
-  }
-
-  goBack(){
-    this.location.back();
-  }
-
   getValues(): Witness {
     const witness: Witness = {
       documento: this.createWitness.value.documento,
       nombre: this.capitalizeFirstLetter(this.createWitness.value.nombre),
       apellido: this.capitalizeFirstLetter(this.createWitness.value.apellido),
-      direccion: this.createWitness.value.direccion,
+      direccion: this.capitalizeFirstLetter(this.createWitness.value.direccion),
       telefono: this.createWitness.value.telefono,
       mesa: this.createWitness.value.mesa,
       puesto: this.capitalizeFirstLetter(this.createWitness.value.puesto),
@@ -205,7 +188,49 @@ export class WitnessesComponent {
     return witness;
   }
 
+  isAdult(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      const birthDate = new Date(control.value);
+      const today = new Date();
+      const minimumDate = new Date();
+      minimumDate.setFullYear(today.getFullYear() - 18);
+
+      if (birthDate > minimumDate) {
+        return { menorDeEdad: true };
+      }
+    }
+
+    return null;
+  }
+
+  disableCalendar(){
+    const fechaActual = new Date();
+    fechaActual.setFullYear(fechaActual.getFullYear() - 18);
+    this.maxDate = fechaActual.toISOString().split('T')[0];
+  }
+
+  async findCandidate() {
+    try {
+      this.hasCandidate = true;
+      const docRef = doc(this.firestore, 'Candidato', this.candidateId);
+      const docSnap = await getDoc(docRef);
+      this.hasCandidate = docSnap.exists();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   capitalizeFirstLetter(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  unableField() {
+    if (this.aRoute.snapshot.paramMap.has('id')) {
+      this.hasId = true;
+    }
+  }
+
+  goBack(){
+    this.location.back();
   }
 }

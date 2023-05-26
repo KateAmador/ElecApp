@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
@@ -23,9 +23,11 @@ export class LeadersComponent {
   id: string | null;
   titulo: string;
   boton: string;
-  backButtonVisible = false;
+  hasId = false;
   hasCandidate = false;
   candidateId: string = 'candidatoID';
+  passwordValidators;
+  maxDate: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -36,27 +38,30 @@ export class LeadersComponent {
     private router: Router,
     private location: Location) {
 
+    this.id = this.aRoute.snapshot.paramMap.get('id');
+    this.titulo = this.id ? 'Editar Lider' : 'Crear Lider';
+    this.boton = this.id ? 'Editar' : 'Agregar';
+    this.passwordValidators = this.id === null ? [Validators.required] : [];
+
     this.createLeader = this.fb.group({
       documento: ['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
+      fechaNacimiento: ['', this.isAdult],
       genero: ['', Validators.required],
       email: ['', Validators.required],
-      contraseña: ['', Validators.required]
+      contraseña: ['', this.passwordValidators]
     })
-    this.id = this.aRoute.snapshot.paramMap.get('id');
-    this.titulo = this.id ? 'Editar Lider' : 'Crear Lider';
-    this.boton = this.id ? 'Editar' : 'Agregar';
   }
 
   ngOnInit(): void {
     this.getLeaders(this.candidateId);
     this.updateLeader();
     this.findCandidate();
-    this.backButton();
+    this.unableField();
+    this.disableCalendar();
   }
 
   async addEdit() {
@@ -82,6 +87,7 @@ export class LeadersComponent {
       const userCredential = await this.loginService.register(leader.email, leader.contraseña);
       const uid = userCredential.user.uid;
       leader.uid = uid;
+      leader.contraseña = "";
       const response = await this.userService.addUser(this.candidateId, leader);
 
       this.toastr.success('Guardado Correctamente', 'Lider');
@@ -165,9 +171,9 @@ export class LeadersComponent {
     }
   }
 
-  backButton() {
+  unableField() {
     if (this.aRoute.snapshot.paramMap.has('id')) {
-      this.backButtonVisible = true;
+      this.hasId = true;
     }
   }
 
@@ -180,7 +186,7 @@ export class LeadersComponent {
       documento: this.createLeader.value.documento,
       nombre: this.capitalizeFirstLetter(this.createLeader.value.nombre),
       apellido: this.capitalizeFirstLetter(this.createLeader.value.apellido),
-      direccion: this.createLeader.value.direccion,
+      direccion: this.capitalizeFirstLetter(this.createLeader.value.direccion),
       telefono: this.createLeader.value.telefono,
       fechaNacimiento: this.createLeader.value.fechaNacimiento,
       email: this.createLeader.value.email,
@@ -189,6 +195,27 @@ export class LeadersComponent {
       rol: 'lider'
     };
     return leader;
+  }
+
+  isAdult(control: AbstractControl): ValidationErrors | null {
+    if (control.value) {
+      const birthDate = new Date(control.value);
+      const today = new Date();
+      const minimumDate = new Date();
+      minimumDate.setFullYear(today.getFullYear() - 18);
+
+      if (birthDate > minimumDate) {
+        return { menorDeEdad: true };
+      }
+    }
+
+    return null;
+  }
+
+  disableCalendar(){
+    const fechaActual = new Date();
+    fechaActual.setFullYear(fechaActual.getFullYear() - 18);
+    this.maxDate = fechaActual.toISOString().split('T')[0];
   }
 
   capitalizeFirstLetter(value: string): string {

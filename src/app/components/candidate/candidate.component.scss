@@ -160,3 +160,14 @@ h6 {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+
+@media only screen and (max-width: 767px) {
+  .card-container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .padding {
+    padding: 0rem !important;
+  }
+}

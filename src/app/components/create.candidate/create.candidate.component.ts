@@ -17,6 +17,7 @@ export class CreateCandidateComponent {
   submitted = false;
   loading = false;
   disable = false;
+  hasId = false;
   id: string | null;
 
   constructor(
@@ -39,6 +40,7 @@ export class CreateCandidateComponent {
 
   ngOnInit(): void {
     this.updateCandidate();
+    this.unableField();
   }
 
   async addEdit() {
@@ -124,5 +126,11 @@ export class CreateCandidateComponent {
 
   capitalizeFirstLetter(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  unableField() {
+    if (this.aRoute.snapshot.paramMap.has('id')) {
+      this.hasId = true;
+    }
   }
 }
