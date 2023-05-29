@@ -28,6 +28,8 @@ export class LeadersComponent {
   candidateId: string = 'candidatoID';
   passwordValidators;
   maxDate: string = '';
+  itemsPerPage = 10;
+  currentPage = 1;
 
   constructor(
     private fb: FormBuilder,
@@ -220,5 +222,9 @@ export class LeadersComponent {
 
   capitalizeFirstLetter(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.leaders.length / this.itemsPerPage);
   }
 }

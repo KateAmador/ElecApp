@@ -64,10 +64,11 @@
               placeholder="Email" [readonly]="hasId">
             <input type="password" class="form-control border-0 border-bottom mt-3" formControlName="contraseña"
               placeholder="Contraseña" *ngIf="!hasId">
-              <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-dark  mt-3 mx-2" *ngIf="hasCandidate">{{boton}}</button>
-                <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="hasId">Volver</button>
-              </div>
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-dark  mt-3 mx-2" *ngIf="hasCandidate">{{boton}}</button>
+              <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()"
+                *ngIf="hasId">Volver</button>
+            </div>
           </fieldset>
         </form>
         <!-- Fin Columna 3 del formulario -->
@@ -96,7 +97,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let leader of leaders">
+              <tr
+                *ngFor="let leader of leaders | slice: ((currentPage-1) * itemsPerPage): (currentPage * itemsPerPage)">
                 <th scope="row">{{leader.documento}}</th>
                 <td>{{leader.nombre}}</td>
                 <td>{{leader.apellido}}</td>
@@ -115,6 +117,23 @@
           </table>
           <!-- Fin Tabla -->
 
+          <!-- Controles de paginación -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = 1">Primera</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage - 1">Anterior</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage + 1">Siguiente</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = totalPages">Última</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

@@ -99,7 +99,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let witness of witnesses">
+              <tr
+                *ngFor="let witness of witnesses | slice: ((currentPage-1) * itemsPerPage): (currentPage * itemsPerPage)">
                 <th scope="row">{{witness.documento}}</th>
                 <td>{{witness.nombre}}</td>
                 <td>{{witness.apellido}}</td>
@@ -111,7 +112,8 @@
                 <td>{{witness.puesto}}</td>
                 <td>{{witness.email}}</td>
                 <td>
-                  <a class="btn btn-sm btn-primary me-2" [routerLink]="['/elecciones/testigos/editar-testigos/', witness.id]"><i
+                  <a class="btn btn-sm btn-primary me-2"
+                    [routerLink]="['/elecciones/testigos/editar-testigos/', witness.id]"><i
                       class="bi bi-pencil-square"></i></a>
                   <a (click)="deleteWitness(witness)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                 </td>
@@ -120,6 +122,23 @@
           </table>
           <!-- Fin Tabla -->
 
+          <!-- Controles de paginación -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = 1">Primera</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage - 1">Anterior</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage + 1">Siguiente</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = totalPages">Última</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

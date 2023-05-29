@@ -24,6 +24,8 @@ export class SupportersComponent {
   loading = false;
   submitted = false;
   maxDate: string = '';
+  itemsPerPage = 10;
+  currentPage = 1;
 
   constructor(
     private fb: FormBuilder,
@@ -207,5 +209,9 @@ export class SupportersComponent {
 
   goBack() {
     this.location.back();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.supporters.length / this.itemsPerPage);
   }
 }

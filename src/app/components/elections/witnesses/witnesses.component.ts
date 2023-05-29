@@ -27,6 +27,9 @@ export class WitnessesComponent {
   hasId = false;
   passwordValidators;
   maxDate: string = '';
+  itemsPerPage = 10;
+  currentPage = 1;
+
 
   constructor(
     private fb: FormBuilder,
@@ -232,5 +235,9 @@ export class WitnessesComponent {
 
   goBack(){
     this.location.back();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.witnesses.length / this.itemsPerPage);
   }
 }

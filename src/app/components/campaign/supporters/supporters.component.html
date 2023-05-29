@@ -61,7 +61,8 @@
               placeholder="Email">
             <div class="d-flex justify-content-end">
               <button type="submit" class="btn btn-dark  mt-3 mx-2">{{boton}}</button>
-              <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()" *ngIf="hasId">Volver</button>
+              <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()"
+                *ngIf="hasId">Volver</button>
             </div>
           </fieldset>
         </form>
@@ -91,7 +92,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let supporter of supporters">
+              <tr
+                *ngFor="let supporter of supporters | slice: ((currentPage-1) * itemsPerPage): (currentPage * itemsPerPage)">
                 <th scope="row">{{supporter.documento}}</th>
                 <td>{{supporter.nombre}}</td>
                 <td>{{supporter.apellido}}</td>
@@ -101,7 +103,8 @@
                 <td>{{supporter.genero}}</td>
                 <td>{{supporter.email}}</td>
                 <td>
-                  <a class="btn btn-sm btn-primary" [routerLink]="['/campaña/seguidores/editar-seguidores/', supporter.id]"><i
+                  <a class="btn btn-sm btn-primary"
+                    [routerLink]="['/campaña/seguidores/editar-seguidores/', supporter.id]"><i
                       class="bi bi-pencil-square"></i></a>
                   <a (click)="deleteSupporter(supporter)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                 </td>
@@ -110,6 +113,23 @@
           </table>
           <!-- Fin Tabla -->
 
+          <!-- Controles de paginación -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = 1">Primera</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage - 1">Anterior</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage + 1">Siguiente</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = totalPages">Última</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
