@@ -31,10 +31,13 @@ export const navbarData: INavbarData[] = [
     icon: 'bi bi-file-text',
     label: 'Elecciones',
     items: [
-
       {
         routeLink: 'elecciones/testigos',
         label: 'Testigos'
+      },
+      {
+        routeLink: 'elecciones/puestos',
+        label: 'Puestos'
       },
     ]
   }
