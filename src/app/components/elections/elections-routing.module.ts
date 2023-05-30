@@ -15,7 +15,11 @@ const routes: Routes = [
   {
     path: 'puestos',
     component: PlacesComponent
-  }
+  },
+  {
+    path: 'puestos/editar-puestos/:id',
+    component: PlacesComponent
+  },
 ];
 
 @NgModule({
