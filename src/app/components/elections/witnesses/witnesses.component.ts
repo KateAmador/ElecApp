@@ -7,6 +7,8 @@ import { Witness } from 'src/app/interfaces/witnesses.interface';
 import { UsersService } from '@services/users.service';
 import { LoginService } from '@services/login.service';
 import { Location } from '@angular/common';
+import { PlaceService } from '@services/place.service';
+import { Place } from 'src/app/interfaces/place.interface';
 
 @Component({
   selector: 'app-witnesses',
@@ -29,12 +31,14 @@ export class WitnessesComponent {
   maxDate: string = '';
   itemsPerPage = 10;
   currentPage = 1;
+  places: Place[] = [];
 
 
   constructor(
     private fb: FormBuilder,
     private userService: UsersService,
     private loginService: LoginService,
+    private placeService: PlaceService,
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router,
@@ -51,7 +55,6 @@ export class WitnessesComponent {
       apellido: ['', Validators.required],
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
-      mesa: ['', Validators.required],
       puesto: ['', Validators.required],
       fechaNacimiento: ['', this.isAdult],
       genero: ['', Validators.required],
@@ -66,6 +69,7 @@ export class WitnessesComponent {
     this.findCandidate();
     this.unableField();
     this.disableCalendar();
+    this.getPlaces();
   }
 
   async addEdit() {
@@ -114,6 +118,12 @@ export class WitnessesComponent {
     });
   }
 
+  getPlaces() {
+    this.placeService.getPlaces().subscribe(place => {
+      this.places = place;
+    });
+  }
+
   async deleteWitness(witness: Witness) {
     if (confirm('¿Estás seguro que deseas eliminar al testigo?')) {
       const response = await this.userService.deleteUser(witness, this.candidateId);
@@ -158,7 +168,6 @@ export class WitnessesComponent {
               telefono: firstItem.telefono,
               fechaNacimiento: firstItem.fechaNacimiento,
               genero: firstItem.genero,
-              mesa: firstItem.mesa,
               puesto: firstItem.puesto,
               email: firstItem.email,
               contraseña: ""
@@ -180,7 +189,6 @@ export class WitnessesComponent {
       apellido: this.capitalizeFirstLetter(this.createWitness.value.apellido),
       direccion: this.capitalizeFirstLetter(this.createWitness.value.direccion),
       telefono: this.createWitness.value.telefono,
-      mesa: this.createWitness.value.mesa,
       puesto: this.capitalizeFirstLetter(this.createWitness.value.puesto),
       fechaNacimiento: this.createWitness.value.fechaNacimiento,
       genero: this.createWitness.value.genero,
@@ -223,8 +231,10 @@ export class WitnessesComponent {
     }
   }
 
-  capitalizeFirstLetter(value: string): string {
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    capitalizeFirstLetter(value: string): string {
+    const words = value.split(' ');
+    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+    return capitalizedWords.join(' ');
   }
 
   unableField() {

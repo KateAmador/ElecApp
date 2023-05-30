@@ -7,7 +7,6 @@ export interface Witness {
   telefono: string;
   uid?: string;
   email: string;
-  mesa: string;
   puesto: string;
   contraseña: string;
   fechaNacimiento: string;
