@@ -29,6 +29,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { CampaignComponent } from './components/campaign/campaign.component';
 import { ElectionsComponent } from './components/elections/elections.component';
 import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.component';
+import { PlacesComponent } from '@components/elections/places/places.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.compon
     ResetPasswordComponent,
     CampaignComponent,
     ElectionsComponent,
-    SublevelMenuComponent
+    SublevelMenuComponent,
+    PlacesComponent
   ],
   imports: [
     BrowserModule,

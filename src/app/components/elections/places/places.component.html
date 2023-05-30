@@ -1,1 +1,81 @@
-<p>places works!</p>
+<div class="card-body">
+  <div class="container mt-5">
+    <h1 class="title text-center">PUESTOS</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <!-- Columna del formulario -->
+        <legend class="mb-5 mt-5">
+          {{tittle}}
+        </legend>
+        <span *ngIf="submitted && createPlace.invalid" class="badge bg-danger">Todos los campos son
+          obligatorios
+        </span>
+        <form class="" [formGroup]="createPlace" (ngSubmit)="addEdit()" form>
+          <fieldset>
+            <input type="text" class="form-control border-0 border-bottom" formControlName="nombre"
+              placeholder="Nombre">
+            <input type="text" class="form-control border-0 border-bottom mt-3" formControlName="direccion"
+              placeholder="Direccion">
+            <input type="number" class="form-control border-0 border-bottom mt-3" formControlName="numeroMesas"
+              placeholder="Numero de Mesas">
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-dark  mt-3 mx-2">{{button}}</button>
+              <button class="btn btn-dark  mt-3 float-start mx-2" type="button" (click)="goBack()"
+                *ngIf="hasId">Volver</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="col-md-8">
+        <legend class="mb-5 mt-5">
+          Listado de Puestos
+        </legend>
+        <div class="table-responsive">
+          <h4 *ngIf="places.length == 0">No hay datos para mostrar</h4>
+          <table class="table table-responsive" *ngIf="places.length > 0">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Numero de Mesas</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let place of places | slice: ((currentPage-1) * itemsPerPage): (currentPage * itemsPerPage)">
+                <td>{{place.nombre}}</td>
+                <td>{{place.direccion}}</td>
+                <td>{{place.numeroMesas}}</td>
+                <td>
+                  <a class="btn btn-sm btn-primary me-2"
+                    [routerLink]="['/elecciones/puestos/editar-puestos/', place.id]"><i
+                      class="bi bi-pencil-square"></i></a>
+                  <a (click)="deletePlace(place)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Controles de paginación -->
+          <nav aria-label="Page navigation example" *ngIf="places.length > 10">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = 1">Primera</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage - 1">Anterior</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = currentPage + 1">Siguiente</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link cursor-pointer" (click)="currentPage = totalPages">Última</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
