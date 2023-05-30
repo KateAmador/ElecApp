@@ -56,7 +56,7 @@
         <form [formGroup]="createLeader" (ngSubmit)="addEdit()" form>
           <fieldset>
             <select class="form-select border-0 border-bottom mt-3" formControlName="genero">
-              <option selected disabled>Selecciona el genero</option>
+              <option value="" selected disabled>Selecciona el genero</option>
               <option value="Mujer">Mujer</option>
               <option value="Hombre">Hombre</option>
             </select>
@@ -118,7 +118,7 @@
           <!-- Fin Tabla -->
 
           <!-- Controles de paginación -->
-          <nav aria-label="Page navigation example">
+          <nav aria-label="Page navigation example" *ngIf="leaders.length > 10">
             <ul class="pagination justify-content-center">
               <li class="page-item" [class.disabled]="currentPage === 1">
                 <a class="page-link cursor-pointer" (click)="currentPage = 1">Primera</a>

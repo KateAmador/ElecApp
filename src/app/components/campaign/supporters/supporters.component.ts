@@ -198,7 +198,9 @@ export class SupportersComponent {
   }
 
   capitalizeFirstLetter(value: string): string {
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    const words = value.split(' ');
+    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+    return capitalizedWords.join(' ');
   }
 
   unableField() {
