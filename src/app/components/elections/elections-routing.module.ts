@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WitnessesComponent } from './witnesses/witnesses.component';
 import { PlacesComponent } from './places/places.component';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
     path: 'puestos/editar-puestos/:id',
     component: PlacesComponent
   },
+  {
+    path: 'reportes',
+    component: ReportsComponent
+  }
 ];
 
 @NgModule({
