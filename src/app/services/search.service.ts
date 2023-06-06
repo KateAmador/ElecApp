@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/compat/firestore';
-import { Observable, combineLatest, map, switchMap } from 'rxjs';
+import { combineLatest, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
