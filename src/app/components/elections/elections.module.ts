@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ElectionsRoutingModule } from './elections-routing.module';
 
@@ -10,6 +10,7 @@ import { ElectionsRoutingModule } from './elections-routing.module';
   imports: [
     CommonModule,
     ElectionsRoutingModule
-  ]
+  ],
+  providers: [DatePipe]
 })
 export class ElectionsModule { }
