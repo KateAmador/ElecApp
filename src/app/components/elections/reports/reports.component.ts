@@ -43,39 +43,44 @@ export class ReportsComponent {
   }
 
   getTableData(placeId: string) {
-    this.reportService.getTableData(placeId).subscribe((data: any[]) => {
-      this.tableData = data.map((item, index) => ({
+    this.reportService.getTableData(placeId).subscribe((data: any) => {
+      const sortedData = Object.keys(data).sort().map((key, index) => ({
         mesa: `Mesa ${index + 1}`,
-        votos: item.votos,
-        hora: item.hora
+        votos: data[key].votos,
+        hora: data[key].hora
       }));
+      this.tableData = sortedData;
     });
   }
+
+
   onPlaceChange() {
     const placeId = this.selectedPlace.id;
     this.getTableData(placeId);
 
     const nTables = this.selectedPlace.numeroMesas;
-    this.tables = Array(nTables).fill(null).map(() => ({
+    this.tables = Array(nTables).fill(null).map((_, index) => ({
       numeroVotos: null,
-      hora: null
+      hora: null,
+      mesa: index + 1
     }));
   }
+
 
 
   addReport() {
     const placeId = this.selectedPlace.id;
     this.time = this.datePipe.transform(new Date(), 'HH:mm') || '';
-    this.textTime = 'Guadado a las';
+    this.textTime = 'Guardado a las';
 
     for (let i = 0; i < this.tables.length; i++) {
       const table = this.tables[i];
-      const tableId = `mesa${i + 1}`;
 
       if (table.numeroVotos !== null) {
         this.reportService.addReport(
           placeId,
-          tableId,
+          `mesa${table.mesa}`,
+          table.mesa,
           table.numeroVotos,
           this.time
         );
@@ -83,4 +88,5 @@ export class ReportsComponent {
     }
     this.createReport.reset();
   }
+
 }

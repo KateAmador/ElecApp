@@ -11,8 +11,7 @@
         <form *ngIf="selectedPlace" (ngSubmit)="addReport()" class="mt-5">
           <div *ngFor="let table of tables; let i = index">
             <input class="form-control border-0 border-bottom mt-2" type="number" [(ngModel)]="tables[i].numeroVotos"
-              name="numeroVotos" placeholder="Mesa {{ i + 1 }}" required>
-            <div *ngIf="!tables[i].numeroVotos" class="text-danger">Este campo es requerido.</div>
+              name="numeroVotos" placeholder="Mesa {{ i + 1 }}">
           </div>
 
           <button class="btn btn-secondary mt-4" type="submit">Guardar</button>
