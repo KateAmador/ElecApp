@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReportsService } from '@services/reports.service';
 import { PlaceService } from '@services/place.service';
@@ -11,13 +11,14 @@ import { PlaceService } from '@services/place.service';
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent {
+  @ViewChild('formRef') formRef: any;
   createReport: FormGroup;
   places: any[] = [];
   selectedPlace: any;
   time: string = '';
   tables: any[] = [];
-  textTime: string = '';
   tableData: any[] = [];
+  showError: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -66,27 +67,43 @@ export class ReportsComponent {
     }));
   }
 
-
-
   addReport() {
     const placeId = this.selectedPlace.id;
     this.time = this.datePipe.transform(new Date(), 'HH:mm') || '';
-    this.textTime = 'Guardado a las';
+
+    let allFieldsFilled = true;
 
     for (let i = 0; i < this.tables.length; i++) {
       const table = this.tables[i];
 
-      if (table.numeroVotos !== null) {
-        this.reportService.addReport(
-          placeId,
-          `mesa${table.mesa}`,
-          table.mesa,
-          table.numeroVotos,
-          this.time
-        );
+      if (table.numeroVotos === null || table.numeroVotos === '') {
+        allFieldsFilled = false;
+        break;
       }
     }
-    this.createReport.reset();
-  }
 
+    if (allFieldsFilled) {
+
+      for (let i = 0; i < this.tables.length; i++) {
+        const table = this.tables[i];
+
+        if (table.numeroVotos !== null) {
+          this.reportService.addReport(
+            placeId,
+            `mesa${table.mesa}`,
+            table.mesa,
+            table.numeroVotos,
+            this.time
+          );
+        }
+      }
+
+      this.formRef.resetForm();
+      this.showError = false;
+    } else {
+      this.showError = true;
+    }
+  }
 }
+
+

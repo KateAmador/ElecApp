@@ -3,25 +3,29 @@
     <h1 class="title text-center">REPORTES</h1>
     <div class="row">
       <div class="col-md-4">
+
+        <span class="badge bg-danger mt-5" *ngIf="showError">Todos los campos son
+          obligatorios
+        </span>
+
         <select class="form-select border-0 border-bottom mt-3" [(ngModel)]="selectedPlace" (change)="onPlaceChange()">
           <option value="" disabled selected hidden>Selecciona el puesto</option>
           <option *ngFor="let place of places" [ngValue]="place">{{ place.nombre }}</option>
         </select>
 
-        <form *ngIf="selectedPlace" (ngSubmit)="addReport()" class="mt-5">
+        <form *ngIf="selectedPlace" (ngSubmit)="addReport()" class="mt-5" #formRef="ngForm">
           <div *ngFor="let table of tables; let i = index">
             <input class="form-control border-0 border-bottom mt-2" type="number" [(ngModel)]="tables[i].numeroVotos"
-              name="numeroVotos" placeholder="Mesa {{ i + 1 }}">
+              name="numeroVotos" placeholder="Mesa {{ i + 1 }}" required>
           </div>
-
-          <button class="btn btn-secondary mt-4" type="submit">Guardar</button>
+          <button class="btn btn-dark  mt-4" type="submit">Guardar</button>
         </form>
-      </div>
 
+      </div>
 
       <div class="col-md-7 mt-5" *ngIf="tableData.length > 0">
 
-        <table  class="table mt-5">
+        <table class="table mt-5">
           <thead>
             <tr>
               <th scope="col">Mesa</th>
