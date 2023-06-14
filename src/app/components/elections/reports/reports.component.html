@@ -4,19 +4,17 @@
     <div class="row">
       <div class="col-md-4">
 
-        <span class="badge bg-danger mt-5" *ngIf="showError">Todos los campos son
-          obligatorios
-        </span>
+        <span class="badge bg-danger mt-5" *ngIf="showError">Todos los campos son obligatorios</span>
 
         <select class="form-select border-0 border-bottom mt-3" [(ngModel)]="selectedPlace" (change)="onPlaceChange()">
           <option value="" disabled selected hidden>Selecciona el puesto</option>
           <option *ngFor="let place of places" [ngValue]="place">{{ place.nombre }}</option>
         </select>
 
-        <form *ngIf="selectedPlace" (ngSubmit)="addReport()" class="mt-5" #formRef="ngForm">
+        <form *ngIf="selectedPlace" (ngSubmit)="addReport()" class="mt-5" [formGroup]="createReport">
           <div *ngFor="let table of tables; let i = index">
-            <input class="form-control border-0 border-bottom mt-2" type="number" [(ngModel)]="tables[i].numeroVotos"
-              name="numeroVotos" placeholder="Mesa {{ i + 1 }}" required>
+            <input class="form-control border-0 border-bottom mt-2" type="number" formControlName="tables"
+              [(ngModel)]="tables[i].votos" name="votos" placeholder="Mesa {{ i + 1 }}" required>
           </div>
           <button class="btn btn-dark  mt-4" type="submit">Guardar</button>
         </form>
@@ -31,14 +29,41 @@
               <th scope="col">Mesa</th>
               <th scope="col">Votos</th>
               <th scope="col">Hora</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of tableData">
               <td>{{ item.mesa }}</td>
-              <td>{{ item.votos }}</td>
+              <td>
+                <ng-container *ngIf="!item.editando">
+                  {{ formatVotes(item.votos) }}
+                </ng-container>
+                <ng-container *ngIf="item.editando">
+                  <input class="form-control small-input" type="number" [(ngModel)]="item.votos" name="votos">
+                </ng-container>
+              </td>
               <td>{{ item.hora }}</td>
+              <td>
+                <ng-container *ngIf="!item.editando">
+                  <button class="btn btn-sm btn-primary" type="button" (click)="item.editando = true">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.editando">
+                  <div class="button-group">
+                    <button class="btn btn-sm btn-success" type="button" (click)="editVotesItem(item)">
+                      <i class="bi bi-check"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" type="button" (click)="item.editando = false"><i
+                        class="bi bi-x"></i>
+                    </button>
+                  </div>
+                </ng-container>
+
+              </td>
             </tr>
+
           </tbody>
         </table>
       </div>

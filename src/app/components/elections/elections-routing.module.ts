@@ -24,6 +24,10 @@ const routes: Routes = [
   {
     path: 'reportes',
     component: ReportsComponent
+  },
+  {
+    path: 'reportes/editar-reportes/:id',
+    component: ReportsComponent
   }
 ];
 

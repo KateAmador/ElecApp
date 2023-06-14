@@ -3,22 +3,34 @@
   margin-bottom: 5rem;
 }
 
-.btn-separator {
-  margin-right: 10px;
-}
-
-.spinner-border {
-  border-width: 0.10em;
-}
-
 input:focus {
   outline: none !important;
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
-
 .col-md-4{
   margin-right: 5rem;
+}
+
+.small-input {
+  width: 120px;
+}
+
+.button-group button {
+  margin-right: 10px;
+}
+
+
+@media (max-width: 767px) {
+  .col-md-4 {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .col-md-7 {
+    width: 100%;
+  }
+
+  .small-input {
+    width: 100%;
+  }
 }
