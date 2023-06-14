@@ -2,7 +2,11 @@
   <div class="container mt-5">
     <div class="row">
 
-      <h1 class="title">TESTIGOS</h1>
+      <h1 class="title">TESTIGOS
+        <div *ngIf="loading" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </h1>
 
       <legend>{{titulo}}
         <span class="badge bg-warning mt-2 mb-2" *ngIf="!hasCandidate">
