@@ -140,6 +140,8 @@ export class PlacesComponent {
       nombre: this.capitalizeFirstLetter(this.createPlace.value.nombre),
       direccion: this.capitalizeFirstLetter(this.createPlace.value.direccion),
       numeroMesas: this.createPlace.value.numeroMesas,
+      totalVotos:0,
+      testigoAsignado:'Sin asignar'
     };
     return place;
   }

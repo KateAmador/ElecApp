@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { WitnessesComponent } from './witnesses/witnesses.component';
 import { PlacesComponent } from './places/places.component';
 import { ReportsComponent } from './reports/reports.component';
+import { ViewTablesComponent } from './view-tables/view-tables.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'reportes/editar-reportes/:id',
     component: ReportsComponent
+  },
+  {
+    path: 'reportesOsdo',
+    component: ViewTablesComponent
   }
 ];
 

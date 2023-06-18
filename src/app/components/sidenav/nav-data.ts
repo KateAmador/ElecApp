@@ -42,6 +42,10 @@ export const navbarData: INavbarData[] = [
       {
         routeLink: 'elecciones/reportes',
         label: 'Reportes'
+      },
+      {
+        routeLink: 'elecciones/reportesOsdo',
+        label: 'Reportes Consolidado'
       }
     ]
   }

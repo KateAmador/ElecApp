@@ -31,6 +31,7 @@ import { ElectionsComponent } from './components/elections/elections.component';
 import { SublevelMenuComponent } from './components/sidenav/sublevel-menu.component';
 import { PlacesComponent } from '@components/elections/places/places.component';
 import { ReportsComponent } from '@components/elections/reports/reports.component';
+import { ViewTablesComponent } from '@components/elections/view-tables/view-tables.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ReportsComponent } from '@components/elections/reports/reports.componen
     ElectionsComponent,
     SublevelMenuComponent,
     PlacesComponent,
-    ReportsComponent
+    ReportsComponent,
+    ViewTablesComponent
   ],
   imports: [
     BrowserModule,

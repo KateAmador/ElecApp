@@ -3,4 +3,6 @@ export interface Place {
   nombre: string;
   direccion: string;
   numeroMesas: string;
+  totalVotos:number;
+  testigoAsignado:string;
 }
