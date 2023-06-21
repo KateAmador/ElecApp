@@ -11,6 +11,7 @@
           <option *ngFor="let place of places" [ngValue]="place">{{ place.nombre }}</option>
         </select>
 
+        <legend *ngIf="selectedPlace" class="mt-3">Nuevos Votos</legend>
         <form *ngIf="selectedPlace" (ngSubmit)="addReport()" class="mt-5" [formGroup]="createReport">
           <div *ngFor="let table of tables; let i = index">
             <input class="form-control border-0 border-bottom mt-2" type="number" formControlName="tables"

@@ -7,6 +7,7 @@ import { LoginService } from '@services/login.service';
 import { Leader } from 'src/app/interfaces/leader.interface';
 import { Witness } from 'src/app/interfaces/witnesses.interface';
 import { Auth } from '@angular/fire/auth';
+import { Users } from 'src/app/interfaces/users.interface';
 
 
 interface SideNavToggle {
@@ -65,8 +66,8 @@ export class SidenavComponent implements OnInit {
     this.loginService.stateUser().subscribe(res => {
       if (res) {
         console.log('Esta logueado');
-        const leaderId = this.auth.currentUser?.uid;
-        this.getUserData(leaderId);
+        const user = this.auth.currentUser?.uid;
+        this.getUserData(user);
         this.rol;
       } else {
         console.log('No esta logueado');
@@ -120,25 +121,77 @@ export class SidenavComponent implements OnInit {
   getUserData(uid: any) {
     const pathLeader = 'Candidato/candidatoID/Lideres';
     const pathWitness = 'Candidato/candidatoID/Testigos';
+    const pathAdmin = 'Usuarios';
     const id = uid;
 
-    this.loginService.getDoc<Leader>(pathLeader, id).subscribe(res => {
-
-      if (res) {
-        this.rol = res.rol;
-        this.userName = res.nombre;
-        this.userLastName = res.apellido;
+    this.loginService.getDoc<Leader>(pathLeader, id).subscribe(resLeader => {
+      if (resLeader) {
+        this.rol = resLeader.rol;
+        this.userName = resLeader.nombre;
+        this.userLastName = resLeader.apellido;
+        this.filterMenuByUserRole();
       } else {
-
-        this.loginService.getDoc<Witness>(pathWitness, id).subscribe(res2 => {
-
-          if (res2) {
-            this.rol = res2.rol;
-            this.userName = res2.nombre;
-            this.userLastName = res2.apellido;
+        this.loginService.getDoc<Witness>(pathWitness, id).subscribe(resWitness => {
+          if (resWitness) {
+            this.rol = resWitness.rol;
+            this.userName = resWitness.nombre;
+            this.userLastName = resWitness.apellido;
+            this.filterMenuByUserRole();
+          } else {
+            this.loginService.getDoc<Users>(pathAdmin, id).subscribe(resAdmin => {
+              if (resAdmin) {
+                this.rol = resAdmin.rol;
+                this.userName = resAdmin.nombre;
+                this.userLastName = resAdmin.apellido;
+                this.filterMenuByUserRole();
+              }
+            });
           }
         });
       }
+    });
+  }
+
+  filterMenuByUserRole() {
+    const userRole = this.rol;
+    console.log('User Role:', userRole);
+
+    this.navData = navbarData.filter(data => {
+      if (!data.requiredRole) {
+        return true;
+      }
+
+      const isAdmin = userRole === 'admin';
+      const isLider = userRole === 'lider';
+      const isTestigo = userRole === 'testigo';
+
+      if (isAdmin) {
+        return true;
+      }
+
+      if (isLider) {
+        if (data.routeLink === 'inicio' || data.routeLink === 'candidato') {
+          return true;
+        }
+        if (data.routeLink === 'campaña' && data.items) {
+          const filteredItems = data.items.filter(item => item.routeLink === 'campaña/seguidores');
+          data.items = filteredItems;
+          return filteredItems.length > 0;
+        }
+      }
+
+      if (isTestigo) {
+        if (data.routeLink === 'inicio' || data.routeLink === 'candidato') {
+          return true;
+        }
+        if (data.routeLink === 'elecciones' && data.items) {
+          const filteredItems = data.items.filter(item => item.routeLink === 'elecciones/reportes');
+          data.items = filteredItems;
+          return filteredItems.length > 0;
+        }
+      }
+
+      return false;
     });
   }
 }
