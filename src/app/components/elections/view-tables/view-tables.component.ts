@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlaceService } from '@services/place.service';
 import { ReportsService } from '@services/reports.service';
+import { Observable, map, startWith } from 'rxjs';
 import { Place } from 'src/app/interfaces/place.interface';
 
 @Component({
@@ -14,11 +15,13 @@ export class ViewTablesComponent {
   @ViewChild('formRef') formRef: any;
   createReport: FormGroup;
   places: Place[] = [];
+  places$!: Observable<Place[]>;
   selectedPlace: any;
   time: string = '';
   tables: any[] = [];
   tableData: any[] = [];
   showError: boolean = false;
+  filter = new FormControl('');
 
   constructor(
     private fb: FormBuilder,
@@ -31,6 +34,20 @@ export class ViewTablesComponent {
     });
 
     this.selectedPlace = '';
+
+    this.placeService.getPlaces()
+      .subscribe((obj: any) => {
+        this.places = obj;
+        this.places$ = this.filter.valueChanges.pipe(
+          startWith(''),
+          map(text => this.search(text))
+        );
+      },
+        (errorData: any) => {
+
+          console.log(errorData);
+        }
+      );
   }
 
   ngOnInit() {
@@ -40,6 +57,14 @@ export class ViewTablesComponent {
   getPlaces() {
     this.placeService.getPlaces().subscribe((data: any) => {
       this.places = data;
+    });
+  }
+
+  search(text: any): Place[] {
+    return this.places.filter((place: Place) => {
+      const term = text.toLowerCase();
+      return place.nombre.toLowerCase().includes(term) ||
+      place.direccion.toLowerCase().includes(term);
     });
   }
 

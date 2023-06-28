@@ -1,39 +1,52 @@
 <div class="card-body">
   <div class="container mt-5">
     <h1 class="title text-center">REPORTE CONSOLIDADO</h1>
-    <div class="row">
-      <div class="col-12 mt-5">
-        <table class="table mt-5">
-          <thead>
-            <tr>
-              <th scope="col">Nombre</th>
+
+  </div>
+</div>
+
+<form class="row">
+  <div class="form-group form-inline col-12 col-md-8">
+    Buscar: <input class="form-control" type="text" [formControl]="filter" />
+  </div>
+  <div class="form-group form-inline col-6 col-md-2 pb-3">
+    <button type="button" ngbAutofocus class="form-control mt-4 btn btn-primary"
+      >Nuevo
+      Puesto</button>
+  </div>
+  <div class="form-group form-inline col-6 col-md-2 pb-3">
+    <button type="button" ngbAutofocus class="form-control mt-4 btn btn-primary" >Exportar Excel</button>
+  </div>
+</form>
+<div  style="height: 70%; overflow: scroll;">
+  <table class="table table-striped osdo" aria-label="">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
               <th scope="col">Numero de mesas</th>
               <th scope="col">Direccion</th>
               <th scope="col">Testigo</th>
               <th scope="col">Total Votos</th>
               <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let place of places">
-              <td>{{ place.nombre }}</td>
-              <td>{{ place.numeroMesas }}</td>
-              <td>{{ place.direccion }}</td>
-              <td>{{ place.testigoAsignado }}</td>
-              <td>{{place.totalVotos}}</td>
-              <td>
-                <ng-container>
-                  <button
-                    class="btn btn-sm btn-primary"
-                    type="button">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                </ng-container>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let place of places$|async">
+        <td>{{ place.nombre }}</td>
+        <td>{{ place.numeroMesas }}</td>
+        <td>{{ place.direccion }}</td>
+        <td>{{ place.testigoAsignado }}</td>
+        <td>{{place.totalVotos}}</td>
+        <td>
+          <ng-container>
+            <button
+              class="btn btn-sm btn-primary"
+              type="button">
+              <i class="bi bi-eye"></i>
+            </button>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
